@@ -1,0 +1,379 @@
+% This is "sig-alternate.tex" V2.1 April 2013
+% This file should be compiled with V2.5 of "sig-alternate.cls" May 2012
+%
+% This example file demonstrates the use of the 'sig-alternate.cls'
+% V2.5 LaTeX2e document class file. It is for those submitting
+% articles to ACM Conference Proceedings WHO DO NOT WISH TO
+% Strictly ADHERE TO THE SIGS (PUBS-BOARD-ENDORSED) STYLE.
+% The 'sig-alternate.cls' file will produce a similar-looking,
+% albeit, 'tighter' paper resulting in, invariably, fewer pages.
+%
+% ----------------------------------------------------------------------------------------------------------------
+% This .tex file (and associated .cls V2.5) produces:
+%       1) The Permission Statement
+%       2) The Conference (location) Info information
+%       3) The Copyright Line with ACM data
+%       4) NO page numbers
+%
+% as against the acm_proc_article-sp.cls file which
+% does NOT produce 1) thru' 3) above.
+%
+% Using 'sig-alternate.cls' you have control, however, from within
+% the source .tex file, over both the CopyrightYear
+% (defaulted to 200X) and the ACM Copyright Data
+% (defaulted to X-XXXXX-XX-X/XX/XX).
+% e.g.
+% \CopyrightYear{2007} will cause 2007 to appear in the copyright line.
+% \crdata{0-12345-67-8/90/12} will cause 0-12345-67-8/90/12 to appear in the copyright line.
+%
+% ---------------------------------------------------------------------------------------------------------------
+% This .tex source is an example which *does* use
+% the .bib file (from which the .bbl file % is produced).
+% TODO REMEMBER HOWEVER: After having produced the .bbl file,
+% and prior to final submission, you *NEED* to 'insert'
+% your .bbl file into your source .tex file so as to provide
+% one 'self-contained' source file.
+% ================= IF YOU HAVE QUESTIONS =======================
+% Questions regarding the SIGS styles, SIGS policies and
+% procedures, Conferences etc. should be sent to
+% Adrienne Griscti (griscti@acm.org)
+%
+% Technical questions _only_ to
+% Gerald Murray (murray@hq.acm.org)
+% ===============================================================
+%
+% For tracking purposes - this is V2.0 - May 2012
+
+\documentclass{sig-alternate-05-2015}
+  \pdfpagewidth=8.5truein
+  \pdfpageheight=11truein
+  
+  
+% Custom package imports
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{booktabs}
+
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{cleveref}
+\usepackage{textcomp}
+\usepackage[usenames, dvipsnames]{color}
+\usepackage{url}
+
+% Custom config
+\graphicspath{{figures/}}
+
+\definecolor{myviolett}{RGB}{127, 0, 85}
+\definecolor{darkred}{RGB}{136, 0, 0}
+\definecolor{darkblue}{RGB}{52, 89, 127}
+\definecolor{lightgreen}{RGB}{44, 55, 0}
+
+\lstset{
+	basicstyle=\ttfamily\scriptsize,
+	keywordstyle=\color{darkred}\ttfamily,
+	stringstyle=\color{darkblue}\ttfamily,
+	commentstyle=\color{lightgreen}\ttfamily,
+	breaklines=true,
+	aboveskip=.75\baselineskip,
+	belowskip=1.5\baselineskip,
+	upquote=true,
+	showstringspaces=false
+}
+
+\lstdefinelanguage{dsl} % Farblich orientiert an Eclipse
+{
+	morekeywords={
+		query,traceFromTo,collect, groupby,
+		result,from,as,
+		metric, sum,
+		length, count,
+		rule, warnIf, errorIf,
+		tracesFrom, to, allOfType
+	},
+	sensitive=false, % keywords are not case-sensitive
+	%morecomment=[l]{//}, % l is for line comment
+	%morecomment=[s]{/*}{*/}, % s is for start and end delimiter
+	morestring=[b]", % defines that strings are enclosed in double quotes
+}
+
+\lstdefinelanguage{xtext} % Farblich orientiert an Xtext Doku
+{
+	morekeywords={
+		ID,	STRING, DOUBLE, MESSAGE,
+		returns, current
+	},
+	sensitive=true, % keywords are case-sensitive
+	%morecomment=[l]{//}, % l is for line comment
+	%morecomment=[s]{/*}{*/}, % s is for start and end delimiter
+	morestring=[b]', % defines that strings are enclosed in double quotes
+	keywordstyle=\color{myviolett}\ttfamily,
+	morekeywords={[2]{Person, UsualCase, Unknown, 
+			ResultDeclaration, Query, 
+			PlusOrMinus, MetricExpression, MulOrDiv, MetricAtomic, SumFunction, ColumnSelection, MetricsCountFunction, MetricsRef, DoubleConstant,
+			RuleBody, RuleSpecification, WarnIf,
+			Column, Requirement,
+			Operator, RuleAtomic,
+			Factor, MetricDefinition, Term,CountFunction, LengthFunction}},
+	keywordstyle={[2]{\color{darkblue}}},
+	stringstyle=\color{lightgreen}\ttfamily,
+}
+
+\crefname{lstlisting}{Listing}{Listings}
+\crefname{figure}{Figure}{Figures}
+
+\begin{document}
+
+% Copyright
+\setcopyright{acmcopyright}
+%\setcopyright{acmlicensed}
+%\setcopyright{rightsretained}
+%\setcopyright{usgov}
+%\setcopyright{usgovmixed}
+%\setcopyright{cagov}
+%\setcopyright{cagovmixed}
+
+
+% the DOI
+\doi{http://dx.doi.org/xx.xxxx/xxxxxxx.xxxxxxx}
+
+% the ISBN
+\isbn{978-1-4503-4486-9/17/04}
+
+\acmPrice{\$15.00}
+
+%
+% --- Author Metadata here ---
+\conferenceinfo{SAC'17,}{ April 3-7, 2017, Marrakesh, Morocco}
+\CopyrightYear{2017} % Allows default copyright year (20XX) to be over-ridden - IF NEED BE.
+%\crdata{0-12345-67-8/90/01}
+% --- End of Author Metadata ---
+
+\title{A Model-Driven Approach for Specification-Driven Automated UI Testing
+%Possible alternative titles:
+%A model driven approach for specifying automated UI tests
+%A domain-specific language for defining automated UI tests
+%Generating automated UI tests from formal requirement specifications
+%Natural-language processing for test generation
+%Automating UI tests from a scenario DSL
+%\titlenote{(Produces the permission block, and copyright information). For use with SIG-ALTERNATE.CLS. Supported by ACM.}
+}
+%\subtitle{[Extended Abstract]
+%\titlenote{A full version of this paper is available as \textit{Author's Guide to Preparing ACM SIG Proceedings Using \LaTeX$2_\epsilon$\ and BibTeX} at \texttt{www.acm.org/eaddress.htm}}}
+%
+% You need the command \numberofauthors to handle the 'placement
+% and alignment' of the authors beneath the title.
+%
+% For aesthetic reasons, we recommend 'three authors at a time'
+% i.e. three 'name/affiliation blocks' be placed beneath the title.
+%
+% You are NOT restricted in how many 'rows' of
+% "name/affiliations" may appear. We just ask that you restrict
+% the number of 'columns' to three.
+%
+% Because of the available 'opening page real-estate'
+% we ask you to refrain from putting more than six authors
+% (two rows with three columns) beneath the article title.
+% More than six makes the first-page appear very cluttered indeed.
+%
+% Use the \alignauthor commands to handle the names
+% and affiliations for an 'aesthetic maximum' of six authors.
+% Add names, affiliations, addresses for
+% the seventh etc. author(s) as the argument for the
+% \additionalauthors command.
+% These 'additional authors' will be output/set for you
+% without further effort on your part as the last section in
+% the body of your article BEFORE References or any Appendices.
+
+\numberofauthors{1} %  in this sample file, there are a *total*
+% of EIGHT authors. SIX appear on the 'first-page' (for formatting
+% reasons) and the remaining two appear in the \additionalauthors section.
+%
+\author{
+% You can go ahead and credit any number of authors here,
+% e.g. one 'row of three' or two rows (consisting of one row of three
+% and a second row of one, two or three).
+%
+% The command \alignauthor (no curly braces needed) should
+% precede each author name, affiliation/snail-mail address and
+% e-mail address. Additionally, tag each line of
+% affiliation/address with \affaddr, and tag the
+% e-mail address with \email.
+%
+% 1st. author
+\alignauthor
+%Christoph Rieger\\
+%       \affaddr{ERCIS}\\
+%       \affaddr{ERCIS, University of Münster}\\
+       % TODO wirklich die Post-Adresse?
+   %    \affaddr{Leonardo Campus 3}\\
+   %    \affaddr{48149 Münster, Germany}\\
+%       \affaddr{Münster, Germany}\\
+%       \email{christoph.rieger@ercis.de}
+- blinded for review -
+}
+%TODO weitere Autoren
+
+% There's nothing stopping you putting the seventh, eighth, etc.
+% author on the opening page (as the 'third row') but we ask,
+% for aesthetic reasons that you place these 'additional authors'
+% in the \additional authors block, viz.
+%\additionalauthors{Additional authors: John Smith (The Th{\o}rv{\"a}ld Group, email: {\texttt{jsmith@affiliation.org}}) and Julius P.~Kumquat (The Kumquat Consortium, email: {\texttt{jpkumquat@consortium.net}}).}
+\date{7 October 2016}
+% Just remember to make sure that the TOTAL number of authors
+% is the number that will appear on the first page PLUS the
+% number that will appear in the \additionalauthors section.
+
+\maketitle
+\begin{abstract}
+The most important key to success for a software project are concise and relevant requirements as recent research shows.
+Requirement documents fulfilling these quality criteria include besides others an at least semi-formal description and an abstract UI description. 
+However, stakeholder expectations change constantly during a project and requirement documents and especially UI descriptions are often not updated leading to severe problems in the development and testing phase.
+This paper introduces an approach that automatically recognizes differences between requirement and UI descriptions and rewards up to date requirement documents.
+The center of the approach is a domain-specific language that connects textual requirement descriptions to the corresponding abstract UI and thereby enables advanced validation and user support.
+In addition to improving the overall quality of requirement documents, the language comes with a generator infrastructure to generate automated UI test cases for different UI frameworks such as Web and SWT. 
+The focus of the approach is to ease the creation and validation of requirements documents incentivized by the automated UI test cases generated from the descriptions.
+\end{abstract}
+
+%
+% The code below should be generated by the tool at
+% http://dl.acm.org/ccs.cfm
+% Please copy and paste the code instead of the example below. 
+%
+\begin{CCSXML}
+	<ccs2012>
+	<concept>
+	<concept_id>10011007.10010940.10010971.10010980.10010984</concept_id>
+	<concept_desc>Software and its engineering~Model-driven software engineering</concept_desc>
+	<concept_significance>500</concept_significance>
+	</concept>
+	<concept>
+	<concept_id>10011007.10011074.10011111.10011696</concept_id>
+	<concept_desc>Software and its engineering~Maintaining software</concept_desc>
+	<concept_significance>500</concept_significance>
+	</concept>
+	</ccs2012>
+\end{CCSXML}
+
+\ccsdesc[500]{Software and its engineering~Model-driven software engineering}
+\ccsdesc[500]{Software and its engineering~Maintaining software}
+
+%
+%  Use this command to print the description
+%
+\printccsdesc
+
+% We no longer use \terms command
+%\terms{Theory}
+
+\keywords{Domain-Specific Language, Behavior-Driven Development, Model-driven software development, Automated UI testing, Xtext}
+
+\section{Introduction}
+-	Well documented and up-to-date Requirements are crucial for project success
+-	Many standards on how to describe requirements and what to include (functional, non-functional, UI-descriptions)
+-	UI descriptions are an important part since they create a common ground for developers, testers and business analysts to discuss even before implementation has started
+-	Because requirement documents play a central role in software development project every change affects multiple documents. If there is no traceability between the different artifacts it might happen that documents get not updated accordingly. Especially, in projects under time pressure documents will not be updated leading not only to outdated requirements but also to outdated documentation and more importantly outdated or irrelevant test cases.
+-	The approach presented in this paper tries to encourage the requirements maintenance by rewarding it with fully generated automated test cases.
+-	The domain specific language introduced combines wireframe UI descriptions with specification written in a ubiquitous language as defined by the behavior driven development process.
+-	As for tools like cucumber the restriction applies: The main focus of the specification driven testing approach is to ensure a clean and up-to-date documentation of the system rewarded with fully generated test cases.
+Well understood, documented and up-to-date requirements are crucial to successfully accomplishing a software development project.
+There are many standards for software requirement such as [Quelle] and [Quelle] that all define the structure and the content of the textual requirement specifications and additional artifacts such as abstract UI description [Quelle for Standard].
+Especially in projects following an agile process such as Scrum or Canban, requirements are documented by user stories encapsulating a specific function from a user’s perspective.
+In addition, the Behavior Driven Development approach divides user stories in more detailed scenarios that come with a pre-defined format using an ubiquitous language to describe the expected behavior.
+
+
+\section{Related Work}\label{sec:RelatedWork}
+BDD Approach
+Wireframing
+Generating automated test cases
+
+
+\section{Specification-Driven UI Tesing}\label{sec:SpecificationDrivenUITesting}
+\subsection{Specifying the Application}\label{sec:SpecifyingTheApplication} 
+The capabilities of the Specification Language are illustrated by defining wireframe, feature and mapping definitions for a simple application.
+
+Application to create calendar entries. Assume that we focus on describing the main features of the applications frontend. Additional parts of the software described by the agile testing pyramid such as integration tests and unit tests might be tested using other tools
+Login Screen 
+Welcome Screen showing the agenda of the day and a plus button at the top right to calendar entries
+Write specification for logging in  Feature file for some scenarios
+Bring business analysts and testers together to write scenarios based on the UI descriptions
+After the feature files have been written the final ingredient to convert the specification into an executable testcase needs to be added by the developer. The developer of the UI application has to come up with a mapping file that maps the logical screen elements from the wireframesketch to the elements in the real implementation.
+Introducing a sample mapping file
+Running the generator
+Executing test cases locally and in an CI environment
+
+\subsection{Composition of the Specification Language}
+\subsubsection{Specification Language Architecture}
+Figure to show how everything interacts
+\subsubsection{Wireframesketcher Integration}
+Existing Framework used to specify wireframes within an eclipse environment.
+EMF Based to easily integrate with the Xtext based DSLs.
+Metamodel patched to add some marker interfaces
+Xtext Adapter added to make model elements referable from the outside.
+
+\subsubsection{Feature DSL}
+Feature DSL defines the structure of a feature file as well as re-usable language parts
+Based on the Control Action Parameter from Jubula.
+Possible sentences are always based on the current scope
+
+\subsubsection{Mapping DSL DSL}
+Maps logical elements from the screen to real world implementations
+Navigator concept
+Identify by ID
+Validations
+
+\subsubsection{Generator}
+Takes feature and mapping file in combination with the wireframesketch to generate test cases
+The generator infrastructure allows different generator for different UI Frameworks. In the default implementation there is a generator for Web applications
+In addition, there have been proprietary generators for SWT based RCP applications
+The generators can currently be configured per Eclipse workspace.
+Generator generates Cucumber specifications files that are able to run web-based test with spock as execution framework and selenium as web driver underneath. 
+The logic to access the elements on each page is encapsulated in page objects (fowler) that are also generated from the screen files. Some of the functionality generated into the page objects relies on library methods that come with the framework. 
+The generator can be integrated in a CI environment like Jenkins. In such an environment it will take the feature, mapping and screen files and turn them into Cucumber specification, before they are executed. 
+
+\section{Discussion}\label{sec:Discussion}
+Not introducing a new tool or technique, but bringing existing approaches together
+
+\section{Conclusion}\label{sec:Conclusion} %and Future Work
+Especially after the first release of a functionality the user stories and UI description become less relevant, because discussion now focusses on the running application. Mitigate this by putting the feature description and the UI description in the focus of development 
+Not only generate Testcases, but also generate implementation, especially in the UI area.
+Web-enable to increase non-technical user’s acceptance. 
+Focus on Service tests in the same way (replay UI description by formal Service Descriptions such as WSDL)
+Improve process inclusion (write scenarios in HP Quality Center and report execution back to HP QC). 
+Language Design Currently little bit technical to ease scoping could be changed. Leading to advanced scoping and content assist mechanisms to achieve 
+
+
+%\newpage
+%
+% The following two commands are all you need in the
+% initial runs of your .tex file to
+% produce the bibliography for the citations in your paper.
+%IMPORTANT directly embedded
+\bibliographystyle{abbrv}
+\bibliography{specification_driven_testing}  % sigproc.bib is the name of the Bibliography in this case
+
+%\begin{thebibliography}{10}
+%\end{thebibliography}
+
+% You must have a proper ".bib" file
+%  and remember to run:
+% latex bibtex latex latex
+% to resolve all references
+%
+% the ACM needs 'a single self-contained file'!
+%
+%\balancecolumns
+\begin{comment}
+\appendix
+%Appendix A
+\section{Headings in Appendices}
+\subsection{References}
+Generated by bibtex from your ~.bib file.  Run latex,
+then bibtex, then latex twice (to resolve references)
+to create the ~.bbl file.  Insert that ~.bbl file into
+the .tex source file and comment out
+the command \texttt{{\char'134}thebibliography}.
+%\balancecolumns
+\end{comment}
+\end{document}
