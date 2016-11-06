@@ -85,12 +85,15 @@
 \lstdefinelanguage{dsl} % Farblich orientiert an Eclipse
 {
 	morekeywords={
-		query,traceFromTo,collect, groupby,
-		result,from,as,
-		metric, sum,
-		length, count,
-		rule, warnIf, errorIf,
-		tracesFrom, to, allOfType
+		Feature,
+		As,a,
+		I, want, to,
+		In, order, to,
+		Scenario,
+		Given, I, am, on, the, screen, 
+		when, I, in, the, textfield, type, and,click,button,
+		then, the, alert, is,
+		Mapping, url,fragment,locator, label, nls, en
 	},
 	sensitive=false, % keywords are not case-sensitive
 	%morecomment=[l]{//}, % l is for line comment
@@ -291,17 +294,96 @@ Generating automated test cases
 
 \section{Specification-Driven UI Tesing}\label{sec:SpecificationDrivenUITesting}
 \subsection{Specifying the Application}\label{sec:SpecifyingTheApplication} 
-The capabilities of the Specification Language are illustrated by defining wireframe, feature and mapping definitions for a simple application.
+The capabilities of the Specification Language are illustrated by defining wireframe, feature and mapping definitions for a simple calendar application.
+The web-based calendar application consist of a login screen, an overview screen and a details screen.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.8\linewidth]{Login.png}
+	\caption{Wireframe sketch describing the Login screen.}
+	\label{fig:login}
+\end{figure}
+\cref{fig:login} shows the login screen that has two text input fields and one button.
+After entering the username and the user's password the login can be executed by clicking the login button.
+The expected behavior of the screen is described within a feature file that contains different scenarios.
+\begin{lstlisting}[captionpos=b, caption=Feature Description: Login Screen., label={lst:featurelogin}, language=dsl]
+Feature Login
 
-Application to create calendar entries. Assume that we focus on describing the main features of the applications frontend. Additional parts of the software described by the agile testing pyramid such as integration tests and unit tests might be tested using other tools
-Login Screen 
-Welcome Screen showing the agenda of the day and a plus button at the top right to calendar entries
-Write specification for logging in  Feature file for some scenarios
-Bring business analysts and testers together to write scenarios based on the UI descriptions
-After the feature files have been written the final ingredient to convert the specification into an executable testcase needs to be added by the developer. The developer of the UI application has to come up with a mapping file that maps the logical screen elements from the wireframesketch to the elements in the real implementation.
-Introducing a sample mapping file
-Running the generator
-Executing test cases locally and in an CI environment
+As a "Calendar User"
+I want to "login to the calendar application"
+In order to "manage my appointments"
+
+Scenario ValidLogin
+Given I am on the screen Login 
+when I type "johnDoe" in the Username textfield 
+and I type "Password" in the Password textfield 
+and I click the Login button
+then I am on the the screen Overview 
+and the Appointments table is visible
+\end{lstlisting}
+\cref{lst:featurelogin} shows the feature description for the login screen that is divided into three main parts. 
+The first part defines the feature name which in this case is \textit{Login}.
+The second part explains the benefit of this feature from a customer perspective. 
+The keyword sequences \textit{As a}, \textit{I want to}, and \textit{In order to} are predefined by the specification language grammar to ensure an uniform structure.
+Although, the second part is optional and therefore not evaluated by the generators it is an important mechanism to verify the that a feature is really required (Quellen BDD).
+The third part contains multiple scenario descriptions that defines different scenarios for the same screen using a BDD like structure.
+For a single screen there can be multiple scenarios within one feature file that describe different behavior, however, the sample shown in the following will focus on a successful login.
+
+The \textit{Login} scenario from \cref{lst:featurelogin} starts with setting the context which in this case is the Login screen. 
+The first action introduced by the keyword sequence \textit{When I} is about typing the value ``\textit{johnDoe}" into the \textit{Username} textfield. 
+While the \textit{When I} keyword sequences is proposed to structure the scenario description the keyword \textit{type} and in the third action \textit{click} are proposed dependent on the widgets on the screen in context.
+The second part of the When statement determines on which widget the action should be executed.
+At this point only such widgets are considered valid that are on the screen and applicable for the action keyword.
+Since there is a real reference to the widget errors can be detected easily when a widget is removed or renamed.
+
+The last part of the scenario description is the assertion area in which the screen content is checked after the actions have been executed.
+The first assertion changes the screen context of the scenario, since it is assumed that after a successful login the screen has changed.
+In the example scenario from \cref{lst:FeatureLogin} it is assumed that the Overview screen is shown.
+The following assertion statements introduced by \textit{and the} are now executed in the context of the \textit{Overview} screen which means that only widgets from that screen can be referenced.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.8\linewidth]{Overview.png}
+	\caption{Wireframe sketch describing the Overview screen.}
+	\label{fig:overview}
+\end{figure}
+\cref{fig:overview} Shows the Overview screen that is shown after a successful login and contains a table showing all known appointments and a plus button to add new entries.
+To describe further scenarios for this screen a separate feature file is recommended.
+
+The last ingredient to generate automated test cases from the specification is the mapping file that maps the logical elements on the screen to their implementation.
+\begin{lstlisting}[captionpos=b, caption=Mapping Description: Login Screen., label={lst:mappinglogin}, language=dsl]
+Mapping Login
+
+url {fragment:"#/login"}
+label {nls{en:"Login"}}
+Username{
+	locator:"#username"
+}
+Password{
+	locator:"#password"
+}
+Login{ 
+    driver: org.sample.calendar.ButtonDriver
+	locator:"#login"
+}
+\end{lstlisting}
+\cref{lst:mappinglogin} shows the mapping description for the Login screen.
+The first part of the file states the URL needed to find the screen within the application which is ``\#/login". 
+After the keyword \textit{label} the label of the page as shown in the browser is stated, which can be used for identifying and verifying the correct screen within the application.
+The second part of the mapping files contains one entry for each widget on the screen.
+As in the feature file, \textit{Username},\textit{Password}, and \textit{Login} are real references so that every change done to theses widgets in the screen file automatically cause an error.
+By providing such an early feedback mechanism it can be ensured that the changes in the screen files are also done in the feature and mapping descriptions.
+For every widget there is one \textit{locator} which in case of an web application is the ID of the element in the HTML document tree.
+For custom widgets or such that cannot be found using a simple ID mechanism a custom driver can be specified as shown for the \textit{Login} button.
+Explicitly stating a \textit{driver} will make the automated test try to reach out to the widget using the custom driver. 
+The mechanism enables the use of custom widgets without applying any changes to the screen or feature files.
+
+With the screen, feature, and mapping file created the basis for generation of automated UI tests is given.
+Within the Eclipse environment the generator is executed on every save of a feature or mapping file.
+By combining screen and mapping file a page object for every screen is generated.
+The page objects encapsulate the access to all elements on the screen and are used by the automated tests.
+The automated tests themselves are generated by using the information from the screen and feature files.
+Every scenario is turned into a test method containing all actions and assertions from the feature file.
+After being generated the test cases can be executed locally within Eclipse or in a maven build on a continuous integration environment.
+
 
 \subsection{Composition of the Specification Language}
 \subsubsection{Specification Language Architecture}
@@ -316,12 +398,14 @@ Xtext Adapter added to make model elements referable from the outside.
 Feature DSL defines the structure of a feature file as well as re-usable language parts
 Based on the Control Action Parameter from Jubula.
 Possible sentences are always based on the current scope
+Advanced concepts (parameter, depends on)
 
 \subsubsection{Mapping DSL DSL}
 Maps logical elements from the screen to real world implementations
-Navigator concept
+Driver concept
 Identify by ID
 Validations
+
 
 \subsubsection{Generator}
 Takes feature and mapping file in combination with the wireframesketch to generate test cases
