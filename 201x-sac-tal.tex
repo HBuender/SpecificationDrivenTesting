@@ -93,7 +93,7 @@
 		Given, I, am, on, the, screen, 
 		when, I, in, the, textfield, type, and,click,button,
 		then, the, alert, is,
-		Mapping, url,fragment,locator, label, nls, en
+		Mapping, url,fragment,locator, label, nls, en, driver
 	},
 	sensitive=false, % keywords are not case-sensitive
 	%morecomment=[l]{//}, % l is for line comment
@@ -294,18 +294,24 @@ Generating automated test cases
 
 \section{Specification-Driven UI Tesing}\label{sec:SpecificationDrivenUITesting}
 \subsection{Specifying the Application}\label{sec:SpecifyingTheApplication} 
-The capabilities of the Specification Language are illustrated by defining wireframe, feature and mapping definitions for a simple calendar application.
-The web-based calendar application consist of a login screen, an overview screen and a details screen.
+The capabilities of the Specification Language are illustrated by creating wireframe, feature and mapping definitions for a simple calendar application.
+The calendar web application consist of a login screen and an overview screen and is able to manage an users appointments. 
+In the following a wireframesketcher model for the login screen and the overview screen are explained.
+In addition, the feature file for the login screen is explained to illustrate some of the language capabilities to describe scenarios.
+Finally, the mapping file is explained that contains rules to identify the widgets' implementation in the actual application.
+All three files together are processed by a generator to create automated test cases.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.8\linewidth]{Login.png}
 	\caption{Wireframe sketch describing the Login screen.}
 	\label{fig:login}
 \end{figure}
-\cref{fig:login} shows the login screen that has two text input fields and one button.
-After entering the username and the user's password the login can be executed by clicking the login button.
-The expected behavior of the screen is described within a feature file that contains different scenarios.
-\begin{lstlisting}[captionpos=b, caption=Feature Description: Login Screen., label={lst:featurelogin}, language=dsl]
+
+\cref{fig:login} shows a wireframesketcher model of the login screen that has two text input fields and one button.
+The graphical representation of the models are created using the wireframesketcher tool are backed by an Ecore model making it easy to integrate them with the domain-specific languages for feature and mapping definitions.
+After entering a valid username and a valid password the login can be executed by clicking the login button leading to the overview screen as shown in \Cref{fig:overview}.
+The expected behavior for the Login screen is described formally within a feature file that contains different scenarios.
+\begin{lstlisting}[captionpos=b, caption=Feature Description: Login Screen., label={lst:featureLogin}, language=dsl]
 Feature Login
 
 As a "Calendar User"
@@ -320,24 +326,32 @@ and I click the Login button
 then I am on the the screen Overview 
 and the Appointments table is visible
 \end{lstlisting}
-\cref{lst:featurelogin} shows the feature description for the login screen that is divided into three main parts. 
+
+\Cref{lst:featureLogin} shows the feature description for the login screen that is divided into three main parts. 
 The first part defines the feature name which in this case is \textit{Login}.
+The name field is a crucial for references to this file as well as for later generation so that is restricted to alphabetical letters excluding special characters.
+
 The second part explains the benefit of this feature from a customer perspective. 
 The keyword sequences \textit{As a}, \textit{I want to}, and \textit{In order to} are predefined by the specification language grammar to ensure an uniform structure.
 Although, the second part is optional and therefore not evaluated by the generators it is an important mechanism to verify the that a feature is really required (Quellen BDD).
-The third part contains multiple scenario descriptions that defines different scenarios for the same screen using a BDD like structure.
-For a single screen there can be multiple scenarios within one feature file that describe different behavior, however, the sample shown in the following will focus on a successful login.
 
-The \textit{Login} scenario from \cref{lst:featurelogin} starts with setting the context which in this case is the Login screen. 
-The first action introduced by the keyword sequence \textit{When I} is about typing the value ``\textit{johnDoe}" into the \textit{Username} textfield. 
-While the \textit{When I} keyword sequences is proposed to structure the scenario description the keyword \textit{type} and in the third action \textit{click} are proposed dependent on the widgets on the screen in context.
+The third part describes different scenarios for the same screen using a BDD like structure.
+For a single screen there can be multiple scenarios within one feature file that describe different behavior, however, the sample shown above focuses on a successful login.
+The \textit{Login} scenario starts with the context area in which the Login screen is set into context. 
+Based on the screen in context the possible widgets, actions and their parameters are determined dynamically.
+The following command area defines action executed on the screen.
+The action introduced by the keyword sequence \textit{When I} is about typing the value ``\textit{johnDoe}" into the \textit{Username} textfield. 
+While the \textit{When I} keyword sequences is proposed to structure the scenario description the keyword \textit{type} is proposed dependent on the widgets on the screen in context.
 The second part of the When statement determines on which widget the action should be executed.
 At this point only such widgets are considered valid that are on the screen and applicable for the action keyword.
-Since there is a real reference to the widget errors can be detected easily when a widget is removed or renamed.
+Based on the underlying Ecore model, references can be validated at any time leading to early detection of test cases affected by renaming or removing of widgets.
+Another When statement is attached using the \textit{and I} keyword sequence to type the password into the respective field.
+The third command statement defines a click on the \textit{Login} button that causes an event in the application.
+The expected response of the application to the event triggered by clicking the button, is described in the next part of the scenario description.
 
 The last part of the scenario description is the assertion area in which the screen content is checked after the actions have been executed.
 The first assertion changes the screen context of the scenario, since it is assumed that after a successful login the screen has changed.
-In the example scenario from \cref{lst:FeatureLogin} it is assumed that the Overview screen is shown.
+In the example scenario from \cref{lst:featureLogin} it is assumed that the Overview screen is shown.
 The following assertion statements introduced by \textit{and the} are now executed in the context of the \textit{Overview} screen which means that only widgets from that screen can be referenced.
 \begin{figure}[h]
 	\centering
@@ -345,10 +359,11 @@ The following assertion statements introduced by \textit{and the} are now execut
 	\caption{Wireframe sketch describing the Overview screen.}
 	\label{fig:overview}
 \end{figure}
-\cref{fig:overview} Shows the Overview screen that is shown after a successful login and contains a table showing all known appointments and a plus button to add new entries.
-To describe further scenarios for this screen a separate feature file is recommended.
 
-The last ingredient to generate automated test cases from the specification is the mapping file that maps the logical elements on the screen to their implementation.
+\Cref{fig:overview} Shows the Overview screen that is shown after a successful login and contains a table showing all known appointments and a plus button to add new entries.
+To describe further scenarios for this screen a separate feature file is created.
+To generate automated test cases from the screen and feature specification a mapping is required that maps the logical elements on the screen to their implementation.
+
 \begin{lstlisting}[captionpos=b, caption=Mapping Description: Login Screen., label={lst:mappinglogin}, language=dsl]
 Mapping Login
 
@@ -362,25 +377,28 @@ Password{
 }
 Login{ 
     driver: org.sample.calendar.ButtonDriver
-	locator:"#login"
+    locator:"#login"
 }
 \end{lstlisting}
-\cref{lst:mappinglogin} shows the mapping description for the Login screen.
-The first part of the file states the URL needed to find the screen within the application which is ``\#/login". 
+
+\Cref{lst:mappinglogin} shows the mapping description for the Login screen.
+The first part of the file states the URL part needed to find the screen within the application which is ``\#/login". 
 After the keyword \textit{label} the label of the page as shown in the browser is stated, which can be used for identifying and verifying the correct screen within the application.
+
 The second part of the mapping files contains one entry for each widget on the screen.
-As in the feature file, \textit{Username},\textit{Password}, and \textit{Login} are real references so that every change done to theses widgets in the screen file automatically cause an error.
-By providing such an early feedback mechanism it can be ensured that the changes in the screen files are also done in the feature and mapping descriptions.
-For every widget there is one \textit{locator} which in case of an web application is the ID of the element in the HTML document tree.
+As in the feature file, \textit{Username},\textit{Password}, and \textit{Login} are real references to the elements from the wireframesketcher Ecore model.
+Since these can be validated feedback on the impact of changing a widget's or screen's name on the mapping files can be given early.
+For every widget there is one \textit{locator} which in case of a web application could be the ID of the element in the HTML document tree (Reference to HTML DOM).
 For custom widgets or such that cannot be found using a simple ID mechanism a custom driver can be specified as shown for the \textit{Login} button.
 Explicitly stating a \textit{driver} will make the automated test try to reach out to the widget using the custom driver. 
 The mechanism enables the use of custom widgets without applying any changes to the screen or feature files.
 
-With the screen, feature, and mapping file created the basis for generation of automated UI tests is given.
-Within the Eclipse environment the generator is executed on every save of a feature or mapping file.
-By combining screen and mapping file a page object for every screen is generated.
-The page objects encapsulate the access to all elements on the screen and are used by the automated tests.
-The automated tests themselves are generated by using the information from the screen and feature files.
+The combination of screen, feature, and mapping file is used by the a generator to create a page object and a test script.
+The first, encapsulates all interactions, such as clicking, typing, resolving a label, per screen in a single object.
+Basis for the page objects is the combination of screen and mapping files.
+For the example shown in \Cref{lst:featureLogin} there are two mapping files needed one for the \textit{Login} and one for the \textit{Overview} screen.
+
+The second generation results are the test scripts that are generated by using the information from the screen and feature files.
 Every scenario is turned into a test method containing all actions and assertions from the feature file.
 After being generated the test cases can be executed locally within Eclipse or in a maven build on a continuous integration environment.
 
@@ -392,6 +410,7 @@ Figure to show how everything interacts
 Existing Framework used to specify wireframes within an eclipse environment.
 EMF Based to easily integrate with the Xtext based DSLs.
 Metamodel patched to add some marker interfaces
+Metamodel general structure
 Xtext Adapter added to make model elements referable from the outside.
 
 \subsubsection{Feature DSL}
@@ -399,6 +418,7 @@ Feature DSL defines the structure of a feature file as well as re-usable languag
 Based on the Control Action Parameter from Jubula.
 Possible sentences are always based on the current scope
 Advanced concepts (parameter, depends on)
+Execution sequence as stated
 
 \subsubsection{Mapping DSL DSL}
 Maps logical elements from the screen to real world implementations
