@@ -405,8 +405,25 @@ After being generated the test cases can be executed locally within Eclipse or i
 
 \subsection{Composition of the Specification Language}
 \subsubsection{Specification Language Architecture}
-Figure to show how everything interacts
-\subsubsection{Wireframesketcher Integration}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.8\linewidth]{SpecificationLanguageArchitecture.png}
+	\caption{Architecture of the Specification Language.}
+	\label{fig:architectureOverview}
+\end{figure}
+\Cref{fig:architectureOverview} shows the architecture of the Specification Language divided into three logical parts. 
+The wireframesketcher model is the first module that contains the graphical editor as well as the underlying ecore model used to reference screens and their widgets.
+The functionality offered by wireframesketcher has been re-used completely from the existing tooling, however, some customizations were implemented as described in \Cref{sec:WireframesketcherIntegration}.
+The wireframesketcher model is used by the Feature and Mapping DSL component that encapsulate the grammar definitions and the the tooling implementation to support context-sensitive proposal, validation and syntax highlighting
+As shown in the diagram Feature and Mapping DSL are completely independent from each other.
+Thereby, it is possible to use Wireframesketcher and Feature DSL to concisely define requirements without taking advantage of generating any automated test cases.
+Further, it would be possible to only generate the page objects from the combination of wireframesketcher model and Mapping DSL and implement the test cases manually.
+As shown in \Cref{fig:architectureOverview} both generator implementations are independent and separated from the domains-specific language modules.
+Thereby, generators can be switched easily to generate for different environments, such as web or Eclipse RCP applications.
+Both generators interact with the wireframesketcher model as well as with the respective domain-specific language definition.
+The following sections will explain the modules content and their interaction in more detail.
+
+\subsubsection{Wireframesketcher Integration}\label{sec:WireframesketcherIntegration} 
 Existing Framework used to specify wireframes within an eclipse environment.
 EMF Based to easily integrate with the Xtext based DSLs.
 Metamodel patched to add some marker interfaces
