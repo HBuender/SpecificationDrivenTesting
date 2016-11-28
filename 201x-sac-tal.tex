@@ -441,6 +441,14 @@ The adjustments described above extend the features of the underlying model and 
 Therefore, the model adjustments are delivered as an eclipse feature patch that is fully inter operable with the wireframesketcher UI functionalities making them re-usable.
 
 \subsubsection{Feature DSL}
+The Feature DSL is the central part of the Specification Language defining the general structure of the document as well as the available keyword sequences.
+The structure of a feature file as described in \Cref{sec:SpecifyingTheApplication} consists of three main parts of which the third part holding the scenario descriptions is the most important.
+Every scenario description starts with setting the context to a specific screen before the actions and assertions are defined.
+Both follow the same structure and will always hold the action, the parameter passed to that action and the component on which the action is performed.
+Besides predefined actions there are Implementation commands that are used to specify custom behaviour that is not covered by the capabilities of the Specification Language, e.g. setting the content of a custom widget.
+Within the grammar the implementation command is a simple string, but during generation this string is turned into a test method that might be implemented. 
+
+
 Feature DSL defines the structure of a feature file as well as re-usable language parts
 Based on the Control Action Parameter from Jubula.
 Possible sentences are always based on the current scope
@@ -467,6 +475,8 @@ The generator can be integrated in a CI environment like Jenkins. In such an env
 Not introducing a new tool or technique, but bringing existing approaches together
 Critical resource is the developer, his involvement should be limited as much as possible
 Approach is based on having a screen file as input for the process, that is always up to date.
+Implementation Commands make the Feature DSL usable for specific widgets.
+Further, if the custom widget is used very often, the language might be enhanced to cover the handling of this widgets natively.
 
 
 \section{Conclusion}\label{sec:Conclusion} %and Future Work
