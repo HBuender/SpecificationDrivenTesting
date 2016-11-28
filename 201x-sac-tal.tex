@@ -277,7 +277,10 @@ The focus of the approach is to ease the creation and validation of requirements
 -	Many standards on how to describe requirements and what to include (functional, non-functional, UI-descriptions)
 -	UI descriptions are an important part since they create a common ground for developers, testers and business analysts to discuss even before implementation has started
 -	Because requirement documents play a central role in software development project every change affects multiple documents. If there is no traceability between the different artifacts it might happen that documents get not updated accordingly. Especially, in projects under time pressure documents will not be updated leading not only to outdated requirements but also to outdated documentation and more importantly outdated or irrelevant test cases.
--	The approach presented in this paper tries to encourage the requirements maintenance by rewarding it with fully generated automated test cases.
+- BDD is a methology to specify requirements in terms of scenarios that are basis for the development process.
+- Although BDD is often misinterpreted as tool to describe test cases on a high level of abstraction many BDD tools and frameworks are turning scenarios into executable code.
+. 
+- The approach presented in this paper tries to encourage the requirements maintenance by rewarding it with fully generated automated test cases.
 -	The domain specific language introduced combines wireframe UI descriptions with specification written in a ubiquitous language as defined by the behavior driven development process.
 -	As for tools like cucumber the restriction applies: The main focus of the specification driven testing approach is to ensure a clean and up-to-date documentation of the system rewarded with fully generated test cases.
 Well understood, documented and up-to-date requirements are crucial to successfully accomplishing a software development project.
@@ -308,9 +311,10 @@ All three files together are processed by a generator to create automated test c
 \end{figure}
 
 \cref{fig:login} shows a wireframesketcher model of the login screen that has two text input fields and one button.
-The graphical representation of the models are created using the wireframesketcher tool are backed by an Ecore model making it easy to integrate them with the domain-specific languages for feature and mapping definitions.
+The graphical representation of the models are created using the wireframesketcher tool that is backed by an Ecore model making it easy to integrate them with the domain-specific languages for feature and mapping definitions.
 After entering a valid username and a valid password the login can be executed by clicking the login button leading to the overview screen as shown in \Cref{fig:overview}.
 The expected behavior for the Login screen is described formally within a feature file that contains different scenarios.
+
 \begin{lstlisting}[captionpos=b, caption=Feature Description: Login Screen., label={lst:featureLogin}, language=dsl]
 Feature Login
 
@@ -329,23 +333,23 @@ and the Appointments table is visible
 
 \Cref{lst:featureLogin} shows the feature description for the login screen that is divided into three main parts. 
 The first part defines the feature name which in this case is \textit{Login}.
-The name field is a crucial for references to this file as well as for later generation so that is restricted to alphabetical letters excluding special characters.
+The name field is crucial for references to this file as well as for later generation therefor it is restricted to alphabetical letters excluding any special characters.
 
-The second part explains the benefit of this feature from a customer perspective. 
+The second part explains the benefit of this feature from a users perspective. 
 The keyword sequences \textit{As a}, \textit{I want to}, and \textit{In order to} are predefined by the specification language grammar to ensure an uniform structure.
-Although, the second part is optional and therefore not evaluated by the generators it is an important mechanism to verify the that a feature is really required (Quellen BDD).
+Although, the second part is optional and therefore not evaluated by the generators it is an important mechanism to verify that a feature is really required (Quellen BDD).
 
 The third part describes different scenarios for the same screen using a BDD like structure.
 For a single screen there can be multiple scenarios within one feature file that describe different behavior, however, the sample shown above focuses on a successful login.
 The \textit{Login} scenario starts with the context area in which the Login screen is set into context. 
 Based on the screen in context the possible widgets, actions and their parameters are determined dynamically.
-The following command area defines action executed on the screen.
+The following command area defines actions executed on the screen.
 The action introduced by the keyword sequence \textit{When I} is about typing the value ``\textit{johnDoe}" into the \textit{Username} textfield. 
-While the \textit{When I} keyword sequences is proposed to structure the scenario description the keyword \textit{type} is proposed dependent on the widgets on the screen in context.
+The \textit{When I} keyword sequences is proposed to structure the scenario description and the keyword \textit{type} is proposed dependent on the widgets on the screen in context.
 The second part of the When statement determines on which widget the action should be executed.
-At this point only such widgets are considered valid that are on the screen and applicable for the action keyword.
-Based on the underlying Ecore model, references can be validated at any time leading to early detection of test cases affected by renaming or removing of widgets.
-Another When statement is attached using the \textit{and I} keyword sequence to type the password into the respective field.
+At this point only such widgets are considered valid that are on the screen and applicable for the action keyword typed before.
+Based on the underlying Ecore model, references can be validated at any time leading to early detection of scenarios affected by renaming or removing of widgets.
+Another When statement is added using the \textit{and I} keyword sequence to type the password into the respective field.
 The third command statement defines a click on the \textit{Login} button that causes an event in the application.
 The expected response of the application to the event triggered by clicking the button, is described in the next part of the scenario description.
 
@@ -398,10 +402,9 @@ The first, encapsulates all interactions, such as clicking, typing, resolving a 
 Basis for the page objects is the combination of screen and mapping files.
 For the example shown in \Cref{lst:featureLogin} there are two mapping files needed one for the \textit{Login} and one for the \textit{Overview} screen.
 
-The second generation results are the test scripts that are generated by using the information from the screen and feature files.
+The second generation results are the test scripts that are generated using the information from the screen and feature files.
 Every scenario is turned into a test method containing all actions and assertions from the feature file.
 After being generated the test cases can be executed locally within Eclipse or in a maven build on a continuous integration environment.
-
 
 \subsection{Composition of the Specification Language}
 \subsubsection{Specification Language Architecture}
@@ -411,10 +414,11 @@ After being generated the test cases can be executed locally within Eclipse or i
 	\caption{Architecture of the Specification Language.}
 	\label{fig:architectureOverview}
 \end{figure}
+
 \Cref{fig:architectureOverview} shows the architecture of the Specification Language divided into three logical parts. 
-The wireframesketcher model is the first module that contains the graphical editor as well as the underlying ecore model used to reference screens and their widgets.
-The functionality offered by wireframesketcher has been re-used completely from the existing tooling, however, some customizations were implemented as described in \Cref{sec:WireframesketcherIntegration}.
-The wireframesketcher model is used by the Feature and Mapping DSL component that encapsulate the grammar definitions and the the tooling implementation to support context-sensitive proposal, validation and syntax highlighting
+The wireframesketcher model is the first module that contains the graphical editor as well as the underlying Ecore model used to reference screens and their widgets.
+The functionality offered by wireframesketcher tool has been re-used completely, however, some customizations were implemented as described in \Cref{sec:WireframesketcherIntegration}.
+The wireframesketcher model is used by the Feature and Mapping DSL component that encapsulate the grammar definitions and the the tooling implementation to support context-sensitive proposal, validation and syntax highlighting.
 As shown in the diagram Feature and Mapping DSL are completely independent from each other.
 Thereby, it is possible to use Wireframesketcher and Feature DSL to concisely define requirements without taking advantage of generating any automated test cases.
 Further, it would be possible to only generate the page objects from the combination of wireframesketcher model and Mapping DSL and implement the test cases manually.
