@@ -428,11 +428,17 @@ Both generators interact with the wireframesketcher model as well as with the re
 The following sections will explain the modules content and their interaction in more detail.
 
 \subsubsection{Wireframesketcher Integration}\label{sec:WireframesketcherIntegration} 
-Existing Framework used to specify wireframes within an eclipse environment.
-EMF Based to easily integrate with the Xtext based DSLs.
-Metamodel patched to add some marker interfaces
-Metamodel general structure
-Xtext Adapter added to make model elements referable from the outside.
+Wireframesketcher is an tool for creating UI prototypes for GUI based applications. 
+It is well integrated in the Eclipse toolchain and offers many different UI styles, such as SWT, iOS, and HTML5.
+The sketches are stored in an Ecore model that is available in an open source repository.
+To use wireframesketcher models as basis for feature and mapping descriptions that underlying Ecore model was enhanced.
+First, the existing marker interfaces, such as ClickSupport and SelectionSupport, were enhanced to support more advance concepts such as DoubleClickSupport and BooleanSelectionSupport.
+Based on the marker interfaces implemented by a widget the proposal of available actions are determined at runtime.
+Second, the Scren class was extended to hold a \textit{name} attribute that is needed to reference create references to it.
+Finally, the ResourceDescriptionStrategy of the wireframesketcher model was extended to work with nested elements on a screen, such as widgets in containers or widgets in tables.
+
+The adjustments described above extend the features of the underlying model and can be used together with the existing wireframesketcher tooling for drawing sketches.
+Therefore, the model adjustments are delivered as an eclipse feature patch that is fully inter operable with the wireframesketcher UI functionalities making them re-usable.
 
 \subsubsection{Feature DSL}
 Feature DSL defines the structure of a feature file as well as re-usable language parts
@@ -459,6 +465,9 @@ The generator can be integrated in a CI environment like Jenkins. In such an env
 
 \section{Discussion}\label{sec:Discussion}
 Not introducing a new tool or technique, but bringing existing approaches together
+Critical resource is the developer, his involvement should be limited as much as possible
+Approach is based on having a screen file as input for the process, that is always up to date.
+
 
 \section{Conclusion}\label{sec:Conclusion} %and Future Work
 Especially after the first release of a functionality the user stories and UI description become less relevant, because discussion now focusses on the running application. Mitigate this by putting the feature description and the UI description in the focus of development 
