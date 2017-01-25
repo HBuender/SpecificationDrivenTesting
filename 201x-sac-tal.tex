@@ -223,19 +223,19 @@
 % for aesthetic reasons that you place these 'additional authors'
 % in the \additional authors block, viz.
 %\additionalauthors{Additional authors: John Smith (The Th{\o}rv{\"a}ld Group, email: {\texttt{jsmith@affiliation.org}}) and Julius P.~Kumquat (The Kumquat Consortium, email: {\texttt{jpkumquat@consortium.net}}).}
-\date{7 October 2016}
+\date{1 February 2017}
 % Just remember to make sure that the TOTAL number of authors
 % is the number that will appear on the first page PLUS the
 % number that will appear in the \additionalauthors section.
 
 \maketitle
 \begin{abstract}
-Behavior-driven development (BDD) brings requirement specifications and their test specifications closer together by using a ubiquitous language to define requirements that can be mapped to test methods.
-Although, frameworks such as JBehave or Cucumber are able to map from requirement specification to test methods, these methods still need to be implemented manually.
-Further, important artifacts such as wireframes are not included in the requirements descriptions and therefore drift apart leading to inconsistent description of the expected design and behavior of the application to develop.
+Behavior-driven development brings requirement specifications and their test cases closer together by using a ubiquitous language to define requirements that can be mapped to test methods.
+Although, frameworks industry-proven tools are able to map from requirement specification to test methods, these methods still need to be implemented manually.
+Further, additional artifacts such as UI descriptions are not formally included in requirement definitions so that they drift apart leading to inconsistencies between the expected design and the described behavior of the application.
 The approach presented in this paper includes wireframes into BDD like requirement specifications to enable fully generated and automatically executable test cases.
-The wireframes are created with wireframesketcher a tool that supports designs for multiple UI-styles such as HTML or iOS.
-The requirements descriptions are defined in a domain-specific language (DSL) that abides to the rules of the ubiquitous language enhanced by the capability to reference widgets from the wireframesketcher model.
+The wireframes are created with Wireframesketcher a tool that supports designs for multiple UI-styles such as HTML or iOS and is well integrated in the Eclipse IDE.
+The requirements descriptions are defined in a domain-specific language (DSL) that abides to the rules of the ubiquitous language enhanced by the capability to reference widgets from the Wireframesketcher model.
 A second DSL is introduced that maps the logical UI widgets to their actual implementation as basis for fully generating automatically runnable test cases.
 The paper elaborates on potential use cases, the integration in the development process and reports on first experiences from using it.
 \end{abstract}
@@ -286,33 +286,36 @@ The paper elaborates on potential use cases, the integration in the development 
 %Since the generator is loosely coupled to feature and mapping file it is possible to generate for different testing framework such as Cucumber for testing web application or SWT Bot for testing RCP applications.
 
 \section{Introduction}
-Behavior-Driven development is a software development process that focuses on the potential business value of each requirement in format of a feature description.
-Sound and comprehensive feature definitions are important to minimize error or wrong implementations during the development process.
-To ensure that all features are implemented it is important to have a sophisticated testing suite in place that is always aligned with the requirements. 
-BDD as a development of the test-driven development methodology ties requirements specifications and their application tests specifications together. 
-By writing requirement documents in the ubiquitous language, they can be interpreted by a machine and mapped to test methods. 
-The advantage of this approach is that it brings stakeholder, requirement engineers and testers together in an early stage of a software development project to textually defined the features and their usage scenarios.
+%TODO: Quelle Dan North what is BDD about
+Behavior-driven development (BDD) aims to turn requirement specifications that are defined using a ubiquitous language into executable test cases and to keep both close together.
+%TODO: Quelle Wer macht was
+In the early stage of a project business analysts, developers and testers together describe the behavior as well as the contribution of each feature to the expected business value of the system.
+%TODO Quelle Verbindung zw. Req und Test
+The feature definitions further detailed by scenario descriptions which tools like JBehave or Cucumber map automatically to test methods that than need to implemented manually.
+%TODO: Quelle Charachteristics
+As an development of test-driven development is has been widely adapted in agile projects in research and practice.
 
 Although, behavior-driven development brings requirements definitions and test specifications closer together, it does not leverage the potential of all artifacts that are available in a typical development process.
 %TODO Quelle für Wireframe Verbreitung
-In most software development processes that include a graphical user interface wireframes are an important result of an early requirements engnieering.
-Wireframes are abstract descriptions of the UI that on purpose do not include any custom logos are fonts, but instead focus on the widgets on a certain screen.
-There is a variety of tools available to create such wireframes that are an important artifact in early discussions on how the application might look like.
-Depending on the development process their might be other more detailed UI models like UI-mockups that typically contain the right styles and fonts or UI-prototypes that in addition includes interactions.
-However, within this paper the inherent information from a wireframe are sufficient.
+In 90\% percent of all development projects implementing an application with a graphical user interface some sort of abstract UI sketch such as wireframes, UI-mockups or prototype are created.
+%TODO Quelle Abstufung der Granularität
+While wireframes only focus on how elements are placed on a screen, UI-mockups may include custom fonts and logos and prototypes can even support interactions such as clicking or opening dialogs. 
+%TODO Quelle Wireframing Tools
+There is a variety of tools such as Balsamiq, SomeOther to create wireframes that are an important artifact in early discussions on how the application might look like.
+%TODO Quelle Wireframesketcher
 
-The two main shortcomings of BDD are the lacking integration with wireframes and the large effort needed to really make requirement specifications executable.
-While the feature definitions describe interactions with UI widgets on a screen, they are not connected to the wireframes defining these widgets.
+The two main shortcomings of BDD and the available tools are the lacking integration with UI descriptions and the manual effort needed to implement the test methods.
+%TODO Quelle für Inhalt von feature und scenario definintion
+While feature and scenario definitions describe interactions with UI widgets on a screen, they are not connected to the wireframes defining these widgets.
 Thereby, changing the name or location of a widget on a screen requires a manual step to update all feature descriptions without any tool support.
-%TODO Quelle gherkin
-The approach presented in this paper connects and existing wireframe software to the Feature domain-specific language very similar to the ubiquitous language gherkin. 
-Based on the connection between wireframes and DSL an editor is offered that supports the user while creating feature descriptions by only suggesting widgets available on the screen.
-In addition, existing feature specification can be validated automatically to mark the usage of widgets that no longer exists or have been renamed without.
-Thereby, potential errors within a test case can be determined before the test case has been executed.
-The second contribution of this paper is a Mapping DSL to map the logical widgets to their implementation.
-By leveraging this information page objects can be generated that encapsulate the access to the implementation and are used by the test specification to execute the automated tests.
+%TODO Quelle gherkin / Wireframesketcher
+The first contribution of the approach presented in this paper is to connect  wireframes from the commercial software \textit{Wireframesketcher} to a domain-specific language (Feature DSL) very similar to the ubiquitous language gherkin. 
+The second contribution is a Mapping DSL to map the logical widgets from wireframe models to their implementation.
+In addition, an editor is offered that supports the user while creating feature and mapping descriptions by for example suggesting widgets available on the screen.
+Moreover, automated validations to mark the usage of widgets that no longer exists or have been renamed are available.
+The third contribution is a generator that combines wireframes, feature and mapping definition to fully generate automatically executable test cases.
 
-Having discussed related work in \Cref{sec:RelatedWork}, \Cref{sec:SpecificationDrivenUITesting} presents the capabilities of the Feature DSL and the Mapping DSL by exemplifying the wireframes, feature, and mapping specification for a simple calendar web application.
+Having discussed related work in \Cref{sec:RelatedWork}, \Cref{sec:SpecificationDrivenUITesting} presents the capabilities of the Feature DSL and the Mapping DSL by exemplifying the wireframes, feature, and mapping specifications for a simple calendar web application.
 In \Cref{sec:Discussion}, potential use cases, the integration in the development process and first usage experiences are discussed before the paper concludes in \Cref{sec:Conclusion}.
 
 
@@ -400,6 +403,8 @@ The \textit{When I} keyword sequences is proposed to structure the scenario desc
 The second part of the When statement determines on which widget the action should be executed.
 At this point only such widgets are considered valid that are on the screen and applicable for the action keyword stated before.
 Based on the underlying Ecore model, references can be validated at any time leading to early detection of scenarios affected by renaming or removing of widgets.
+Thereby, potential errors within a test case can be determined before the test case has been executed.
+
 Another When statement is added using the \textit{and I} keyword sequence to type the password into the respective field.
 The third command statement defines a click on the \textit{Login} button that causes an event in the application.
 The expected response of the application to the event triggered by clicking the button, is described in the next part of the scenario description.
