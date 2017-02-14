@@ -230,12 +230,12 @@
 
 \maketitle
 \begin{abstract}
-Behavior-driven development (BDD) brings requirement specifications and their test cases closer together by using an ubiquitous language to automatically map requirements to test methods.
+Behavior-driven development (BDD) brings requirement specifications and their test cases closer together by using an ubiquitous language to describe requirements that are automatically mapped to test methods.
 Although, industry-proven tools support this automated requirement mapping, the test methods need to be implemented manually.
 Further, additional artifacts such as UI descriptions are not formally included in requirement definitions so that they drift apart leading to inconsistencies between the expected design and the described behavior of the application.
-The approach presented in this paper includes wireframes into BDD like requirement specifications to enable fully generated and automatically executable test cases.
+The approach presented in this paper includes UI descriptions in format of wireframes into BDD like requirement specifications to enable fully generated and automatically executable test cases.
 The wireframes are created with Wireframesketcher a tool that supports designs for multiple UI-styles such as HTML or iOS and is well integrated in the Eclipse IDE.
-The requirements descriptions are defined in a domain-specific language (DSL) that abides to the rules of the ubiquitous language enhanced by references to+ widgets from the Wireframesketcher model.
+The requirements descriptions are defined in a domain-specific language (DSL) that abides to the rules of the ubiquitous language enhanced by references to screens and widgets from the Wireframesketcher model.
 In addition, the DSL supports mapping the logical UI widgets to their actual implementation as basis for fully generating automatically runnable test cases.
 The paper elaborates on potential use cases, the integration in the development process and reports on first experiences from using it.
 \end{abstract}
@@ -275,40 +275,40 @@ The paper elaborates on potential use cases, the integration in the development 
 
 %TODO include key-word driven testing
 \section{Introduction}
-Behavior-driven development (BDD) aims to turn requirement specifications that are defined using an ubiquitous language into executable test cases and to keep both close together\cite{DanNorth}.
+Behavior-driven development aims to turn requirement specifications that are defined using an ubiquitous language into executable test cases and to keep both close together \cite{DanNorth}.
 In the early stage of a project business analysts, developers and testers together describe the behavior as well as the contribution of each feature to the expected business value of the system.
 The feature definitions are further detailed by scenario descriptions which tools like JBehave or Cucumber map automatically to test methods that need to be implemented manually \cite{Carvalho.2010}.
 As an evolution of test-driven development BDD has been widely adapted in agile projects in research and practice \cite{C.Solis.2011}.
 
 Although, behavior-driven development brings requirements definitions and test specifications closer together, it does not leverage the potential of all artifacts that are available in a typical development process.
 A recent survey has shown that in 68\% percent of agile projects low fidelity prototyping is used \cite{Hussain2009}.
+Wireframes are a typical form of low fidelity UI descriptions, however, there are more detailed ones like UI-mockups or prototypes.
 While wireframes only focus on how elements are placed on a screen, UI-mockups may include custom fonts and logos and prototypes can even support interactions such as clicking or opening dialogs \cite{Coyette2007}. 
 There is a variety of tools such as Balsamiq \cite{Balsamiq} or Pencil \cite{Pencil} to create wireframes which are an important artifact in early discussions on how the application might look like.
-
+However, we use Wireframesketcher since it stores the graphical designs as instances of an Ecore meta model and in addition is well integrated into the Eclipse IDE \cite{Wireframesketcher}.
 
 The two main shortcomings of the available BDD tools are the lacking integration with UI descriptions and the manual effort needed to implement test methods.
-While feature and scenario definitions describe interactions with UI widgets on a screen, they are not connected to the UI definitions describing these widgets.
+While feature and scenario definitions describe interactions with UI widgets on a screen, they are not connected to the actual UI definitions describing these widgets.
 Thereby, changing the name or location of a widget on a screen requires a manual step to update all feature descriptions without any tool support \cite{C.Solis.2011}.
 
 %TODO Quelle gherkin / Wireframesketcher
 The contribution of this paper is threefolded:
-First, a Specification-Language used to create Feature descriptions that combine an ubiquitous language with wireframesketcher \cite{Wireframesketcher} elements and Mapping descriptions that map wireframe elements to their implementation is presented.
-Second, a generator that combines wireframes, Feature and Mapping definition to fully generate automatically executable test cases is shown.
+First, a Specification-Language used to create feature descriptions that combine an ubiquitous language with wireframesketcher \cite{Wireframesketcher} elements and mapping descriptions that map wireframe elements to their implementation is presented.
+Second, a generator that combines wireframes, feature and mapping definition to fully generate automatically executable test cases is shown.
 Finally, it is illustrated how the Behavior-Driven UI Testing approach can be integrated into the development process and it is reported on first experiences from software development projects in the banking sector.
 
 
-Having discussed related work in \Cref{sec:RelatedWork}, \Cref{sec:BehaviorDrivenUITesting} elaborates on the capabilities of the Feature DSL and the Mapping DSL by exemplifying the wireframes, Feature, and Mapping specifications for a simple calendar web application.
+Having discussed related work in \Cref{sec:RelatedWork}, \Cref{sec:BehaviorDrivenUITesting} elaborates on the capabilities of Feature DSL and Mapping DSL by exemplifying the wireframes, feature, and mapping specifications for a simple calendar web application.
 In \Cref{sec:Discussion}, potential use cases, the development process integration and first usage experiences are discussed before the paper concludes in \Cref{sec:Conclusion}.
 
 
 \section{Related Work}\label{sec:RelatedWork}
 Characteristics of behavior-driven devlopment as introduced by Dan North \cite{DanNorth} have been researched by \cite{C.Solis.2011} stating that BDD consists of six basic principles.
 These principle include the ubiquitous language needed to define features and scenarios as well as the automated acceptance testing with mapping rules.
-An an integrated approach between BDD and model-driven development based on executable UML enhanced by stereotypes has been introduced by \cite{IoanLazar.2010}.
+An integrated approach between BDD and model-driven development based on executable UML enhanced by stereotypes has been introduced by \cite{IoanLazar.2010}.
 Thereby, the implementation of test methods can be generated and the BDD like definitions become automatically executable.
-In contrast to the approach presented in this paper they focus on "algorithmic and data-intensive types of programs" [BDD of foundational UML].
-%TODO --> Better phrase for 'not covering'
-Besides not covering UI tests, the textual notation of the scenario description contains a lot of technical terms that may confuse user with limited technical background.
+In contrast to the approach presented in this paper the focus is on "algorithmic and data-intensive types of programs" \cite{IoanLazar.2010}.
+In addition, the textual notation does not read like concise sentences since is the scenario description contains some technical terms such as ``'given a project',\{project=newProject\}".
 
 %TODO NLP
 In contrast to natural language processing (NLP) that focuses on turning textual documents written in human language into formal representations as explained by \cite{collobert2008unified} the approach presented in this paper limits the language constructs beforehand.
@@ -374,8 +374,7 @@ The first part defines the feature name which in this case is \textit{Login}.
 The name field is crucial for references to this file as well as for later generation and is therefore restricted to alphanumerical characters.
 The second part of the feature definition contains the user story, that specifies the business value of the feature from the perspective of a certain user \cite{C.Solis.2011}.
 The keyword sequences \textit{As a}, \textit{I want to}, and \textit{In order to} are predefined by the Specification Language grammar to ensure an uniform structure.
-%TODO Better expression for saying thath the implementation of a feature is backed by a business value
-Although, the second part is optional and therefore not evaluated by the generator it is an important mechanism to document that a feature has a business value \cite{C.Solis.2011}.
+Although, the second part is optional and therefore not evaluated by the generator it is an important mechanism to document a features business value \cite{C.Solis.2011}.
 The third part describes different scenarios for each feature using grammar constructs that are a subset of the ubiquitous language gherkin \cite{wynne2012cucumber} enhanced by the functionality to reference wireframe model elements.
 For a single feature there can be multiple scenarios within one file in order to describe different behavior.
 
@@ -475,7 +474,7 @@ It is well integrated in the Eclipse tool-chain and offers many different UI sty
 The sketches are stored as instance of an Ecore model that is available in an open source repository.
 To use wireframesketcher models as basis for Feature and Mapping descriptions the underlying Ecore model was customized.
 
-First, the existing marker interfaces, such as ClickSupport and SelectionSupport, were enhanced to support more advance concepts such as DoubleClickSupport and BooleanSelectionSupport.
+First, the existing marker interfaces, such as \textit{ClickSupport} and \textit{SelectionSupport}, were enhanced to support more advance concepts such as \textit{DoubleClickSupport} and \textit{BooleanSelectionSupport}.
 Based on the marker interfaces implemented by a widget the proposal of available actions within a scenario description are determined at runtime.
 Second, the Screen class was extended to hold a \textit{name} attribute that is needed to create references from a Feature or Mapping definition.
 Finally, the ResourceDescriptionStrategy \cite{xtext.resourcedesc} of the wireframesketcher model was extended to work with nested elements on a screen, such as widgets in containers or widgets in tables.
@@ -606,15 +605,12 @@ As shown by \Cref{fig:architectureOverview} there are two kinds of generators th
 The default implementation is a generator for web applications, that generates Cucumber specification files.
 In addition, there has been a proprietary generator for a SWT based RCP application.
 Since the feature and mapping files are created within Eclipse projects the generator to use can be defined per project.
-%TODO Quelle Extension mechanism, maybe code snipped finding the generator
-%TODO Definitiv Code snippet and or screen shot
 Within the properties of an Eclipse project any generator that is registered through the Eclipse Extension mechanism can be selected.
 Before a generation starts, the application asks the Property Service which generator should be executed and then tries to find that generator within the registered extensions.
 Being able to change the generator at any time makes the whole approach very flexible, however, it also adds restrictions to the DSLs.
 To allow changing generators lately the DSLs need to be generic to a level that different UI frameworks and concepts such as web, SWT or Swing based applications can be described.
 In addition, the DSLs should support the requirements engineer during the creation of test specifications by giving reasonable proposals.
 
-%TODO Fowler: Page Objects
 In order to interact with the widget on a screen, the mapping generator create an Page Object \cite{fowler.2013} per Screen file.
 Within these page objects all interaction with the screen and its widgets are encapsulated.
 
