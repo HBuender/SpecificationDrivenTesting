@@ -297,7 +297,7 @@ First, a Specification-Language used to create feature descriptions that combine
 Second, a generator that combines wireframes, feature and mapping definition to fully generate automatically executable test cases is shown.
 Finally, it is illustrated how the Behavior-Driven UI Testing approach can be integrated into the development process and it is reported on first experiences from software development projects in the banking sector.
 
-Having discussed related work in \Cref{sec:RelatedWork}, \Cref{sec:BehaviorDrivenUITesting} elaborates on the capabilities of Feature DSL and Mapping DSL by exemplifying the wireframe, feature, and mapping specifications for a simple calendar web application.
+Having discussed related work in \Cref{sec:RelatedWork}, \Cref{sec:BehaviorDrivenUITesting} elaborates on the capabilities of feature DSL and mapping DSL by exemplifying the wireframe, feature, and mapping specifications for a simple calendar web application.
 In \Cref{sec:Discussion}, potential use cases, the development process integration and first usage experiences are discussed before the paper concludes in \Cref{sec:Conclusion}.
 
 
@@ -337,7 +337,7 @@ As \cite{leotta2013improving} have shown adopting the page object pattern lowers
 The capabilities of the Behavior-Driven UI Testing approach are shown by creating wireframe, feature and mapping definitions for a simple calendar web application that shows an editable list of a user's appointments after being successfully logged in.
 The application consist of a login and an overview screen which are modeled using the Wireframesketcher tool.
 The behavior in format of scenarios and the business value of each feature are described in feature definition files.
-To connect the wireframe model elements such as screens and widgets to their implementation a Mapping description file is created.
+To connect the wireframe model elements such as screens and widgets to their implementation a mapping description file is created.
 Finally, all three artifacts are processed by a generator that creates automatically executable test scripts.
 
 %TODO Change URL to contain /login
@@ -424,7 +424,7 @@ Login{
 }
 \end{lstlisting}
 
-\Cref{lst:mappinglogin} shows the Mapping description for the Login screen.
+\Cref{lst:mappinglogin} shows the mapping description for the Login screen.
 The first part of the file states the relative URL needed to find the screen within the application which is ``\#/login". 
 After the keyword \textit{label} the label of the application window, e.g. the browser window, is stated, which can be used for identifying and verifying the correct screen within the application.
 
@@ -473,7 +473,7 @@ The following sections will explain the modules content and their interaction in
 Wireframesketcher is a tool for creating UI descriptions for GUI based applications \cite{sanchezgui}. 
 It is well integrated in the Eclipse tool-chain and offers many different UI styles, such as SWT, iOS, and HTML5  \cite{Wireframesketcher}.
 The sketches are stored as instance of an Ecore model that is available in an open source repository.
-To use wireframesketcher models as basis for Feature and Mapping descriptions the underlying Ecore model was customized.
+To use wireframesketcher models as basis for feature and mapping descriptions the underlying Ecore model was customized.
 
 First, the existing marker interfaces, such as \textit{ClickSupport} and \textit{SelectionSupport}, were enhanced to support more advance concepts such as \textit{DoubleClickSupport} and \textit{BooleanSelectionSupport}.
 Based on the marker interfaces implemented by a widget the proposal of available actions within a scenario description are determined at runtime.
@@ -494,8 +494,8 @@ Furthermore, storing the wireframe models as Ecore meta-model instances enable t
 
 \subsection{Feature DSL}
 \subsubsection{Basic Grammar}
-The Feature DSL is the central part of the Specification Language defining the general structure of the document as well as the available keyword sequences.
-The structure of a Feature file as described in \Cref{sec:SpecifyingTheApplication} consists of three main parts.
+The feature DSL is the central part of the Specification Language defining the general structure of the document as well as the available keyword sequences.
+The structure of a feature file as described in \Cref{sec:SpecifyingTheApplication} consists of three main parts.
 The first part holds the feature name and an import section for the used screens and widgets.
 The second part holds the user story stating the benefit of the described feature from a specific user role.
 The third and most important part holds an arbitrary number of scenario descriptions for the feature file.
@@ -531,7 +531,7 @@ TypeAction:
 'type' value=StringOrParam;
 \end{lstlisting}
 
-\Cref{lst:featureGrammar} shows a part of the Feature Grammar that is basis for the definition of the scenario described in \Cref{lst:featureLogin}.
+\Cref{lst:featureGrammar} shows a part of the feature Grammar that is basis for the definition of the scenario described in \Cref{lst:featureLogin}.
 After setting the name, the scenario description continues with setting the context to a specific screen before the commands and assertions are defined.
 As shown above an \textit{Command} consists of an actual action such as ``click" or ``type" that is followed by the widget on which it should be applied.
 Actions may have parameters for example to specify what should be typed into a text field. 
@@ -539,29 +539,29 @@ In addition, there are \textit{Assertion} statements that define the third part 
 Within a scenario it is possible to mix both kinds of statements so that one scenario could describe a series of commands and assertions, e.g. for larger processes taking place on a single or multi screen application.   
 
 \subsubsection{Advanced Concepts}
-In addition to the capabilities shown so far the Feature DSL supports advanced concepts such, external test data, composed test cases, manually implemented commands and assertion, and integration with state of the art Application Lifecycle Management tools.
+In addition to the capabilities shown so far the feature DSL supports advanced concepts such, external test data, composed test cases, manually implemented commands and assertion, and integration with state of the art Application Lifecycle Management tools.
  
-The first advanced concept deals with integrating external test data into the Feature definition by introducing ``parameters" and ``data providers".
+The first advanced concept deals with integrating external test data into the feature definition by introducing ``parameters" and ``data providers".
 Parameters can be used as placeholders instead of concrete text, e.g. in the \textit{BTypeAction} rule from \Cref{lst:featureGrammar}.
 Within the genarated test cases the data provider is asked to replace the parameter by an actual value.
 A data provider can be bound to a scenario using the Data Provider annotation that has to reference a class implementing the \textit{DataProvider} interface.
-Parameters and data providers separate the Feature specifications from the actual test data and thereby make them more resilient and also executable with different test data sets.
+Parameters and data providers separate the feature specifications from the actual test data and thereby make them more resilient and also executable with different test data sets.
 
 The second advanced concept introduces dependencies between scenario definitions to the grammar.
 Although it is considered good practice to keep test cases independent from each other, there are situations in which a certain chain of actions is required by multiple test cases.
 In the calendar application for example the tests of the edit functionality will always start with selecting an existing entry from the table of already created appointments.
-Within the Feature DSL this particular part of selecting an entry from the table and clicking the edit button can be factored out to an reusable scenario.
-To reuse such a scenario the Feature DSL offers a ``depends on" Annotation that can be added to each scenario and holds a reference to another scenario.
+Within the feature DSL this particular part of selecting an entry from the table and clicking the edit button can be factored out to an reusable scenario.
+To reuse such a scenario the feature DSL offers a ``depends on" Annotation that can be added to each scenario and holds a reference to another scenario.
 Based on this information the generator will generate the reusable code into the annotated scenarios test method, so that the test methods depend on each other logically, but remain independent on the source level.
 
-Another advanced concept of the Feature DSL are \textit{ImplementedCommand} statements that can be used to specify custom behavior, e.g. setting the content of a custom widget.
+Another advanced concept of the feature DSL are \textit{ImplementedCommand} statements that can be used to specify custom behavior, e.g. setting the content of a custom widget.
 Within the grammar the \textit{ImplementedCommand} is a simple String, but during generation it is turned into a method within the test script that needs to be implemented manually. 
 To enable regeneration of test case scripts, the custom implementation is separated from the generated code using the generation gap pattern \cite{behrens.2009}.
 Besides \textit{ImplementedCommands} there are also \textit{ImplementedAssertions} that can be used within a scenario definition to define manually implemented assertions.
 Although, one of the main goals of the introduced approach is to provide fully generated automatically executable test cases, there are situations in which a manual implementation is required. 
-Moreover, manually implemented commands and assertions are a good basis for extending the Feature and Mapping grammar in order to support more advanced concepts and to replace manually implemented and maintained code in the long run.
+Moreover, manually implemented commands and assertions are a good basis for extending the feature and mapping grammar in order to support more advanced concepts and to replace manually implemented and maintained code in the long run.
 
-Finally, since test cases and their results are usually managed within a test management tool, e.g. HP Quality Center or SAP Solution Manager, the Feature DSL offers a connection to these systems.
+Finally, since test cases and their results are usually managed within a test management tool, e.g. HP Quality Center or SAP Solution Manager, the feature DSL offers a connection to these systems.
 In the first implementation a connector for HP Quality Center has been included that leverages the REST API of HP Quality Center.
 To connect to HP Quality Center a configuration files needs to be provided holding basic information, such as URL, test project name and credentials.
 In addition, every scenario can be enhanced with a Annotation stating the HP Quality Center ID of the respective test case.
@@ -571,7 +571,7 @@ By integrating HP Quality Center the tests can not only be executed automaticall
 
 \subsection{Mapping DSL}
 One of the main advantages of the introduced approach is that it allows to generate automatically executable test cases.
-The basis for this innovation is on the one hand the integration of wireframesketcher models in Feature definitions and on the other hand the Mapping DSL.
+The basis for this innovation is on the one hand the integration of wireframesketcher models in feature definitions and on the other hand the mapping DSL.
 The latter is required to map the logical elements within a wireframesketcher model such as \textit{Screen} or \textit{Widget} to their implementation.
 As shown in \Cref{lst:mappinglogin} mapping files are defined per \textit{Screen} and consist of two parts.
 
@@ -601,7 +601,7 @@ Second, the references to the EClasses representing the wireframesketcher widget
 Finally, the reusable component feature of wireframesketcher is supported by the mapping DSL, so that reusable screens only have to be mapped once.
 
 \subsection{Generator}\label{sec:Generator} 
-After having defined wireframesketcher, Feature and Mapping descriptions a generator turns all instances the three artifact types into automatically executable test specifications.
+After having defined wireframesketcher, feature and mapping descriptions a generator turns all instances the three artifact types into automatically executable test specifications.
 As shown by \Cref{fig:architectureOverview} there are two kinds of generators that are loosely coupled to the DSLs and the wireframesketcher model.
 The default implementation is a generator for web applications, that generates Cucumber specification files.
 In addition, there has been a proprietary generator for a SWT based RCP application.
@@ -629,10 +629,10 @@ class LoginScreen {
 \end{lstlisting}
 
 \Cref{lst:MappingGenerated} shows the page object for the Login example that is generated as groovy file.
-The page object is in Groovy programming language because it interacts well with the Cucumber test specification that is generated by the Feature generator.
-The structure of the generated page object is very close to the Mapping file because in the end the Mapping DSL is just an slightly enhanced page object description.
+The page object is in Groovy programming language because it interacts well with the Cucumber test specification that is generated by the feature generator.
+The structure of the generated page object is very close to the mapping file because in the end the mapping DSL is just an slightly enhanced page object description.
 The main part of the screen is the ``content" attribute that holds the locators for all the widgets on the screen.
-If a ``driver" is specified in the Mapping file, it is referenced here and during runtime of the test cases the Cucumber framework tries to find the class on the classpath.
+If a ``driver" is specified in the mapping file, it is referenced here and during runtime of the test cases the Cucumber framework tries to find the class on the classpath.
 
 \begin{lstlisting}[captionpos=b, caption=Generated Feature File, label={lst:featureGenerated}, language=dsl]
 	def "ValidLogin"() {
@@ -655,11 +655,11 @@ If a ``driver" is specified in the Mapping file, it is referenced here and durin
 }
 \end{lstlisting}
 
-Although the Feature Generator is logically separated from the Mapping generator it relies on the page objects.
+Although the feature Generator is logically separated from the mapping generator it relies on the page objects.
 Within the generated Cucumber specification the page objects are instantiated and used to interact with the application.
 \Cref{lst:featureGenerated} presents the generated cucumber test script for the Login example. 
-Like the page objects the test script's structure is very close to the structure of the Feature file it is generated from.
-This is due to the fact that the Feature DSL itself introduces no new concepts to the general structure of a feature or scenario description.
+Like the page objects the test script's structure is very close to the structure of the feature file it is generated from.
+This is due to the fact that the feature DSL itself introduces no new concepts to the general structure of a feature or scenario description.
 The innovation lies in the connection to the page object that is fully generated and therefore makes the test scripts ready to be executed without any further manual adjustments.
 
 One though enhancement compared to the feature file is in the ``where" section that holds the data used in the test scenario.
@@ -667,7 +667,7 @@ This section is a feature of the underlying Cucumber framework that enable the t
 The test case will be executed for each line of data, so that this way of generating makes it easy to run the same script multiple times with different test data.
 
 Since the test cases can be executed without further manual interaction the generator can be included in a continuous integration environment.
-Whenever the application under test is builded the test generator is called to turn Wireframe, Feature and Mapping files into test specifications before these are executed during a the build.
+Whenever the application under test is builded the test generator is called to turn Wireframe, feature and mapping files into test specifications before these are executed during a the build.
 %TODO Source? BDD Characteristics?
 By integrating the generator into the development process the basic principle of test driven development which is: fail, refactor, pass can be ensured.
 
@@ -693,7 +693,7 @@ Although, the Specification-Language allows for dynamically provided test data, 
 The Behavior-driven UI testing approach aims to integrate well with existing development processes. 
 Therefore, the presented approach is not introducing new tools or techniques, but on the contrary is combining artifacts from different areas to leverage potential benefits.
 First, the Wireframesketcher tool is used to define wireframe models ranging from simple one page application to complex multi-component perspectives.
-Second, the Feature-DSL enhances the industry proven and widely accepted concepts from the ubiquitous language with references to widgets from the wireframe models.
+Second, the feature-DSL enhances the industry proven and widely accepted concepts from the ubiquitous language with references to widgets from the wireframe models.
 Third, the Mapping-DSL enables for fully generated test cases and in addition minimizes the involvement of critical developer resources. 
 Finally, the plugable generator architecture comes with a standard implementation that can be used for web-application that can be replaced to target company- or company-specific frameworks.
 In addition, the textual feature descriptions are edited and managed together with the source code of the application.
@@ -703,8 +703,8 @@ Thereby, during every build test cases are executed and on top of that the resul
 
 First experiences were gained in context of the development of a banking application. 
 The developed software consist of four components, one has a javascript frontend and the other three are based on the Eclipse SWT UI framework.
-The wireframe models were instances of the same meta-model so that they both could be integrated with Feature- and Mapping-DSL, although, the graphical representation was slightly different.
-In addition to using the same wireframesketcher meta-model it was proven possible to use the same Feature- and Mapping-DSL to describe the behavior and widget mapping.
+The wireframe models were instances of the same meta-model so that they both could be integrated with feature and mapping DSL, although, the graphical representation was slightly different.
+In addition to using the same wireframesketcher meta-model it was proven possible to use the same feature and mapping DSL to describe the behavior and widget mapping.
 The only, exception is the ``locator" attribute within the mapping file that contains two different keywords for introducing either a URL expression or a menu path to be followed.
 
 Within the projects that used the Specification Language wireframesketcher was already known as well as JBehave for defining feature descriptions.
