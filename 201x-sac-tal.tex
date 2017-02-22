@@ -532,7 +532,7 @@ TypeAction:
 \end{lstlisting}
 
 \Cref{lst:featureGrammar} shows a part of the feature Grammar that is basis for the definition of the scenario described in \Cref{lst:featureLogin}.
-After setting the name, the scenario description continues with setting the context to a specific screen before the commands and assertions are defined.
+After stating the name, the scenario description continues with setting the context to a specific screen before the commands and assertions are defined.
 As shown above an \textit{Command} consists of an actual action such as ``click" or ``type" that is followed by the widget on which it should be applied.
 Actions may have parameters for example to specify what should be typed into a text field. 
 In addition, there are \textit{Assertion} statements that define the third part of a scenario description containing the expected outcome of an \textit{Command}.
@@ -551,19 +551,21 @@ The second advanced concept introduces dependencies between scenario definitions
 Although it is considered good practice to keep test cases independent from each other, there are situations in which a certain chain of actions is required by multiple test cases.
 In the calendar application for example the tests of the edit functionality will always start with selecting an existing entry from the table of already created appointments.
 Within the feature DSL this particular part of selecting an entry from the table and clicking the edit button can be factored out to an reusable scenario.
-To reuse such a scenario the feature DSL offers a ``depends on" Annotation that can be added to each scenario and holds a reference to another scenario.
+To reuse such a scenario the feature DSL offers a ``depends on" Annotation that can be added to each scenario to specify a reference to another scenario.
 Based on this information the generator will generate the reusable code into the annotated scenarios test method, so that the test methods depend on each other logically, but remain independent on the source level.
+In combination with the data provider this mechanism can lead to a small, but configurable number of test cases.
 
 Another advanced concept of the feature DSL are \textit{ImplementedCommand} statements that can be used to specify custom behavior, e.g. setting the content of a custom widget.
 Within the grammar the \textit{ImplementedCommand} is a simple String, but during generation it is turned into a method within the test script that needs to be implemented manually. 
 To enable regeneration of test case scripts, the custom implementation is separated from the generated code using the generation gap pattern \cite{behrens.2009}.
 Besides \textit{ImplementedCommands} there are also \textit{ImplementedAssertions} that can be used within a scenario definition to define manually implemented assertions.
 Although, one of the main goals of the introduced approach is to provide fully generated automatically executable test cases, there are situations in which a manual implementation is required. 
-Moreover, manually implemented commands and assertions are a good basis for extending the feature and mapping grammar in order to support more advanced concepts and to replace manually implemented and maintained code in the long run.
+Moreover, manually implemented commands and assertions are a good basis for identifying concepts needed to extend the feature and mapping grammar.
+As a consequence, more advanced concepts can be included in the language and replace manually implemented and maintained code in the long run.
 
 Finally, since test cases and their results are usually managed within a test management tool, e.g. HP Quality Center or SAP Solution Manager, the feature DSL offers a connection to these systems.
 In the first implementation a connector for HP Quality Center has been included that leverages the REST API of HP Quality Center.
-To connect to HP Quality Center a configuration files needs to be provided holding basic information, such as URL, test project name and credentials.
+To connect to HP Quality Center a configuration file needs to be provided holding basic information, such as URL, test project name and credentials.
 In addition, every scenario can be enhanced with a Annotation stating the HP Quality Center ID of the respective test case.
 Whenever a test is executed and a connection is configured the result is stored in HP Quality Center.
 By integrating HP Quality Center the tests can not only be executed automatically, but are also tracked in an application lifecycle management system allowing for detailed analysis and reports.
@@ -601,7 +603,7 @@ Second, the references to the EClasses representing the wireframesketcher widget
 Finally, the reusable component feature of wireframesketcher is supported by the mapping DSL, so that reusable screens only have to be mapped once.
 
 \subsection{Generator}\label{sec:Generator} 
-After having defined wireframesketcher, feature and mapping descriptions a generator turns all instances the three artifact types into automatically executable test specifications.
+After having defined wireframesketcher, feature and mapping descriptions a generator turns all instances of the three artifact types into automatically executable test specifications.
 As shown by \Cref{fig:architectureOverview} there are two kinds of generators that are loosely coupled to the DSLs and the wireframesketcher model.
 The default implementation is a generator for web applications, that generates Cucumber specification files.
 In addition, there has been a proprietary generator for a SWT based RCP application.
@@ -658,27 +660,19 @@ If a ``driver" is specified in the mapping file, it is referenced here and durin
 Although the feature Generator is logically separated from the mapping generator it relies on the page objects.
 Within the generated Cucumber specification the page objects are instantiated and used to interact with the application.
 \Cref{lst:featureGenerated} presents the generated cucumber test script for the Login example. 
-Like the page objects the test script's structure is very close to the structure of the feature file it is generated from.
+Like for the page objects, the test script's structure is very close to the structure of the feature file it is generated from.
 This is due to the fact that the feature DSL itself introduces no new concepts to the general structure of a feature or scenario description.
 The innovation lies in the connection to the page object that is fully generated and therefore makes the test scripts ready to be executed without any further manual adjustments.
 
-One though enhancement compared to the feature file is in the ``where" section that holds the data used in the test scenario.
+One enhancement compared to the feature file is in the ``where" section that holds the data used in the test scenario.
 This section is a feature of the underlying Cucumber framework that enable the test to run with different data input. 
 The test case will be executed for each line of data, so that this way of generating makes it easy to run the same script multiple times with different test data.
 
 Since the test cases can be executed without further manual interaction the generator can be included in a continuous integration environment.
-Whenever the application under test is builded the test generator is called to turn Wireframe, feature and mapping files into test specifications before these are executed during a the build.
+Whenever the application under test is builded the test generator is called to turn wireframe, feature and mapping files into test specifications before these are executed during the build.
 %TODO Source? BDD Characteristics?
 By integrating the generator into the development process the basic principle of test driven development which is: fail, refactor, pass can be ensured.
 
-%TODO Do I want to mention keyword-driven testing?
-%Since a subset of the BDD ubiquitous language is used for test case definition the approach falls into the category of keyword-driven UI tests.
-%TODO Quelle Keyword driven tests und die vorteile
-%Besides the advantages of keyword driven testing as described by [..], the Specification Language as central part of the approach introduces additional benefits.
-%First, reusing well-known constructs from BDDs ubiquitous language lowers the barrier for new users.
-%Further, the ubiquitous language has been tested and adjusted to project needs so that it has become a very concise for defining behavior and scenarios.
-
-%TODO Components
 \section{Discussion}\label{sec:Discussion}
 %Wrap up
 %General Use Cases
@@ -713,10 +707,12 @@ Furthermore, in comparison to manually writing automated test cases the time a d
 However, since there were only four projects involved additional research is required.
 The feedback from business analysts was specially emphasizing the advanced validation possibilities that helped to keep wireframes and requirements specifications congruent.
 In addition, the concept of reusable components as introduced by wireframsketcher that is supported throughout the whole Behavior-driven UI testing approach was appreciated by business analysts to create concise scenario descriptions.
- 
 In contrast to the idea of fully generating all test cases the practical experience has shown that there are cases in which a flexible way to include manually implemented code is necessary. 
 The implementation commands and assertions support this need and also give hints for concepts that should be supported by future versions of the Specification-Language.
 
+The approach is currently limited by heavily depending on wireframeskechter models as basis for UI description while there are other tools such as Balsamiq or Pencil that are not backed by a formal meta-model.
+In addition, there is currently one generator for each technology such as web or RCP, however there are testing framework available that can be used to define joined test cases for both environments.
+These are, however, no inherent limitations of the approach but rather constitute future work in developing the architecture in real-world scenarios that benefit from generating automatically executable test cases.
 
 \section{Conclusion}\label{sec:Conclusion} %and Future Work
 The specification Language introduced by this paper combines the ubiquitous language from the behavior-driven design approach with wireframesketches to generate automatically executable test cases.
@@ -724,15 +720,21 @@ The implementation presented supports basic widgets such as text fields, buttons
 Besides being able to handle custom widgets using implemented commands, and assertions, and custom drivers, it is to be discovered which widgets are to be supported by the default implementation.
 With the flexible architecture of the introduced approach it is possible to support all kinds of custom widgets from wireframe through feature and mapping file up to the generator.
 
-Especially, the use of the ubiquitous language makes the language to learn for people already familiar with BDD. 
+In general future work is required to make the presented approach more flexible, especially, in the area of including also non wireframesketcher UI descrioptions. 
+Therefore, it should be researched if a generic UI model is required that is created by transforming formal or semi-formal UI descriptions as shown by [da Lara].
+Additionaly, it research is required to verify that scenario defined by the Specification-Language may also be translated to test cases for mobile applications.  
+
+Especially, the reuse of the ubiquitous language constructs makes the feature and scenario description look familiar to people with experience in BDD. 
 In addition, every feature descriptions reads like a grammatically correct sentence so that they can even be used for describing the behaviour of the application without leveraging the benefits of automatically generated test cases.
 By combining existing artifacts from different areas of the software development process the Behavior-Driven UI testing approach leverages the full potential of these artifacts.
 At the same time Designer, Business Analysts and Developer remain in their known environment, but work together on a more formal level. 
 
-All in all, the Behavior-Driven UI testing approach enhances the widely accepted Behavior-Driven development process leading to a more sophisticated tooling to specify and maintain automatically executable test cases.
+%Store not only test results, but also test description in HP QC. 
+%Take a look build an intermediate model for the ui description to circumvent the hard dependency to wireframesketcher and configure more input models.
+%Make the feature DSL editable in the web editor
+
+All in all, the Behavior-Driven UI testing approach enhances the widely accepted Behavior-Driven development process leading to a more sophisticated process to specify and maintain automatically executable test cases.
 The integration of wireframesketcher models, Specification-Language and generators was tested successfully in four projects from the banking sector. 
-
-
 
 %Future work:
 %Include more widgets and container types
