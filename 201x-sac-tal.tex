@@ -275,29 +275,29 @@ The paper elaborates on potential use cases, the integration in the development 
 
 %TODO include key-word driven testing
 \section{Introduction}
-Behavior-driven development aims to turn requirement specifications that are defined using an ubiquitous language into executable test cases and aims to keep both close together \cite{DanNorth}.
+Behavior-driven development aims to turn requirement specifications that are defined using an ubiquitous language into executable test cases and tries to keep both close together \cite{DanNorth}.
 As an evolution of test-driven development BDD has been widely adapted in agile projects in research and practice \cite{C.Solis.2011}.
-In the early stage of a project business analysts, developers and testers together describe the behavior as well as the contribution of each feature to the expected business value of the system.
+In the early stage of a project business analysts, developers and testers together describe the behavior as well as expected business value of each feature.
 The feature definitions are further detailed by scenario descriptions which tools like JBehave or Cucumber map automatically to test methods that need to be implemented manually \cite{wynne2012cucumber}.
 
 Although, behavior-driven development brings requirements definitions and test specifications closer together, it does not leverage the potential of all artifacts that are available in a typical development process.
-A recent survey has shown that in 68\% percent of agile projects low fidelity prototyping is used \cite{Hussain2009}.
+A recent survey has shown that 68\% percent of agile projects use low fidelity prototyping \cite{Hussain2009}.
 Wireframes are a typical form of low fidelity UI descriptions, however, there are more detailed ones like UI-mockups or prototypes.
 While wireframes only focus on how elements are placed on a screen, UI-mockups may include custom fonts or logos and prototypes can even support interactions such as clicking or opening dialogs \cite{Coyette2007}. 
 There is a variety of tools such as Balsamiq \cite{Balsamiq} or Pencil \cite{Pencil} to create wireframes which are an important artifact in early discussions on how the application should look like.
-However, we use Wireframesketcher since it stores the graphical designs as instances of an Ecore meta model and in addition is well integrated into the Eclipse IDE \cite{Wireframesketcher}.
+However, we use Wireframesketcher since it stores the graphical designs as instances of an Ecore model and in addition is well integrated into the Eclipse IDE \cite{Wireframesketcher}.
 
 The two main shortcomings of the available BDD tools are the lacking integration with UI descriptions and the manual effort needed to implement test methods.
 While feature and scenario definitions describe interactions with UI widgets on a screen, they are not connected to the actual UI definitions describing these widgets.
-Thereby, changing the name or location of a widget on a screen requires manual steps to update all feature descriptions without any tool support.
+Thereby, changing the name or location of a widget on a screen requires manual steps to update all feature descriptions and derived test methods without any tool support.
 
 %TODO Quelle gherkin / Wireframesketcher
 The contribution of this paper is threefolded:
-First, a Specification-Language used to create feature descriptions that combine an ubiquitous language with wireframesketcher elements \cite{Wireframesketcher} and mapping descriptions that map wireframe elements to their implementation is presented.
+first, a Specification Language consisting of feature descriptions that combine an ubiquitous language with wireframesketcher elements \cite{Wireframesketcher} as well as mapping descriptions that map wireframe elements to their implementation is presented.
 Second, a generator that combines wireframes, feature and mapping definition to fully generate automatically executable test cases is shown.
 Finally, it is illustrated how the Behavior-Driven UI Testing approach can be integrated into the development process and it is reported on first experiences from software development projects in the banking sector.
 
-Having discussed related work in \Cref{sec:RelatedWork}, \Cref{sec:BehaviorDrivenUITesting} elaborates on the capabilities of feature DSL and mapping DSL by exemplifying the wireframe, feature, and mapping specifications for a simple calendar web application.
+Having discussed related work in \Cref{sec:RelatedWork}, \Cref{sec:BehaviorDrivenUITesting} elaborates on the capabilities of Specification Language are exemplified by describing features and turning them into test cases automatically for a simple calendar web application.
 In \Cref{sec:Discussion}, potential use cases, the development process integration and first usage experiences are discussed before the paper concludes in \Cref{sec:Conclusion}.
 
 
@@ -307,17 +307,18 @@ These principle include the ubiquitous language needed to define features and sc
 An integrated approach between BDD and model-driven development based on executable UML enhanced by stereotypes has been introduced by \cite{IoanLazar.2010}.
 Thereby, the implementation of test methods can be generated and the BDD like definitions become automatically executable.
 In contrast to the approach presented in this paper the focus is on "algorithmic and data-intensive types of programs" \cite{IoanLazar.2010}.
-In addition, the textual notation does not read like concise sentences since is the scenario description contains some technical terms such as ``'given a project',\{project=newProject\}".
+Further, the Specification Language introduced by this paper and specially the feature DSL comes with language constructs that read like correct sentences.
+%In addition, the textual notation does not read like concise sentences since is the scenario description contains some technical terms such as ``'given a project',\{project=newProject\}".
 
 One way to interpret sentences in natural language is to use natural language processing (NLP) that focuses on turning textual documents written in human language into formal representations as explained by \cite{collobert2008unified}.
 While the usage of NLP for Behavior-driven development as researched by \cite{soeken2012assisted} has no restrictions on the keywords or grammar constructs used, the ubiquitous language used by BDD tools and frameworks offers a restricted number of keywords to keep the statements automatically interpretable.
 %TODO Quelle Keyword-driven testing 
-Consequently an alternative solution would be to use a keyword-driven testing approach that describes test cases by concatenating keywords and parameters.
+Consequently an alternative solution would be to use a keyword-driven testing approach that describes test cases by concatenating keywords and parameters [..].
 Although the Behavior-Driven UI testing approach limits the number of usable keywords, the main goal is to support feature and scenario definitions that read like natural language.
 Thereby, the approach presented in this paper exists between natural language processing and keyword-driven testing.
 
 The potential benefits of including UI descriptions such as wireframes or prototypes in a model-driven development process have been elaborated by \cite {Rivero2010}.
-\cite{sanchezgui} in particular have shown show that whole application UIs can be generated from wireframe models that were created using Wireframesketcher.
+In particular \cite{sanchezgui} have shown show that whole application UIs can be generated from wireframe models that were created using Wireframesketcher.
 An approach to combine test-driven and model-driven development was introduced by \cite{luna2009bridging}.
 By deriving application models from test scripts they leverage the benefits of both approaches such as short-development circles and less error prone creation of code.
 
@@ -349,7 +350,6 @@ Finally, all three artifacts are processed by a generator that creates automatic
 \end{figure}
 
 \cref{fig:login} shows a wireframesketcher model of the login screen that has two text input fields and one button.
-Wireframesketcher stores the models as instances of the Eclipse Ecore meta-model \cite{SBPM09} making it easy to integrate them with the Xtext-based domain-specific languages created for feature and mapping definitions.
 After entering a valid ``username" and a valid ``password" the login can be executed by clicking the \textit{Login} button leading to the overview screen as shown in \Cref{fig:overview}.
 The expected behavior for the Login screen is described formally within a feature definition file that contains different scenarios.
 
@@ -371,29 +371,24 @@ and the Appointments table is visible
 
 \Cref{lst:featureLogin} shows the feature description for the login screen that is divided into three main parts. 
 The first part defines the feature name which in this case is \textit{Login}.
-The name field is crucial for references to this file as well as for later generation and is therefore restricted to alphanumerical characters.
+The name is crucial for references to this file as well as for later generation and is therefore restricted to alphanumerical characters.
 The second part of the feature definition contains the user story, that specifies the business value of the feature from the perspective of a certain user \cite{C.Solis.2011}.
 The keyword sequences \textit{As a}, \textit{I want to}, and \textit{In order to} are predefined by the Specification Language grammar to ensure an uniform structure.
-Although, the second part is optional and meaning not evaluated by the generator it is an important mechanism to document a features business value \cite{RogerioAtemdeCarvalho.2010}.
+Although, the second part is optional meaning not evaluated by the generator it is an important mechanism to document a features business value \cite{RogerioAtemdeCarvalho.2010}.
 The third part describes different scenarios for each feature using grammar constructs that are a subset of the ubiquitous language gherkin \cite{wynne2012cucumber} enhanced by the functionality to reference wireframe model elements.
 For a single feature there can be multiple scenarios within one file in order to describe different behavior.
 
 The scenario in \Cref{lst:featureLogin} shows the description for a successful login.
-The \textit{Login} scenario starts with the context area which sets a certain screen into focus that is thereby the starting point for the following command and assertion sections.
-The first command starts with the keyword sequence \textit{When I} while all following commands in the same section begin with \textit{And I}.
-The command introduced by the keyword sequence \textit{When I} is about typing the value ``\textit{johnDoe}" into the \textit{Username} textfield. 
+The \textit{ValidLogin} scenario starts with the context area which sets a certain screen into focus that is thereby the starting point for the following command and assertion sections.
+In each command section the first starts with the keyword sequence \textit{When I} while all following commands in the same section begin with \textit{And I}.
+The first command is about typing the value ``\textit{johnDoe}" into the \textit{Username} textfield. 
 Based on the screen in context the possible widgets, actions and their parameters are determined dynamically and proposed to the user while typing.
 The \textit{When I} keyword sequences is proposed to structure the scenario description and the keyword \textit{type} is proposed dependent on the widgets on the screen in context.
 The second part of the command determines on which widget the action should be executed.
 At this point only such widgets are considered valid that are on the screen and applicable for the action keyword stated before.
-Based on the underlying Ecore model, references can be validated at any time leading to early detection of scenarios affected by renaming or removing of widgets.
+Based on the underlying model, references can be validated at any time leading to early detection of scenarios affected by renaming or removing of widgets.
 Thereby, potential errors within a test case can be determined before the test case has been executed.
 The remaining two commands are concerned with entering the correct password before the \textit{Login} button is pressed.
-The expected response of the application to the event triggered by clicking the button, is described in the next part of the scenario description.
-
-The last part of the scenario description is the assertion section in which the screen content is checked after the commands have been executed.
-The first assertion changes the screen context of the scenario, since it is assumed that after a successful login the \textit{Overview} screen is shown.
-The following assertion statements introduced by the keyword sequence \textit{and the} are now executed in the context of the \textit{Overview} screen which means that only widgets from that screen can be referenced.
 
 \begin{figure}[h]
 	\centering
@@ -401,6 +396,10 @@ The following assertion statements introduced by the keyword sequence \textit{an
 	\caption{Wireframe model describing the Overview screen.}
 	\label{fig:overview}
 \end{figure}
+
+The expected response of the application to the event triggered by clicking the button is described in the assertion section in which the screen content is checked.
+The first assertion changes the screen context of the scenario, since it is assumed that after a successful login the \textit{Overview} screen is shown.
+The following assertion statements introduced by the keyword sequence \textit{and the} are now executed in the context of the \textit{Overview} screen which means that only widgets from that screen can be referenced.
 
 \Cref{fig:overview} shows the Overview screen that is shown after a successful login.
 It contains a label, a table showing all known appointments and a plus button to add new entries.
@@ -430,7 +429,7 @@ After the keyword \textit{label} the label of the application window, e.g. the b
 
 The second part of the mapping files contains one entry for each widget on the screen.
 As in the feature file, \textit{Username},\textit{Password}, and \textit{Login} are references to the wireframesketcher model elements.
-In addition to the benefits of these references it can also be validated if all wireframe elements have been mapped.
+In addition to the aforementioned benefits it can also be validated if all wireframe elements have been mapped.
 For each widget there is one \textit{locator} which in case of a web application could be the ID of the element in the HTML document tree \cite{w3c.dom}.
 For custom widgets or such that cannot be found using a simple ID mechanism a custom \textit{driver} can be specified as shown for the \textit{Login} button.
 Explicitly stating a \textit{driver} will make the automated test try to find the widget using the custom \textit{driver} implementation. 
@@ -455,7 +454,7 @@ Since the test scripts are based on the Cucumber framework they can be run local
 \end{figure}
 
 \Cref{fig:architectureOverview} shows the architecture of the Behavior-Driven UI Testing approach divided into three logical parts. 
-First, the Wireframesketcher model that contains the graphical editor as well as the underlying Ecore model used to store screens and their widgets.
+First, the Wireframesketcher model that contains the graphical editor as well as the underlying model used to store screens and their widgets.
 The functionality offered by Wireframesketcher tool has been reused completely, however, some customizations as described in \Cref{sec:WireframesketcherIntegration} were implemented.
 
 The Specification Language is divided into two logical parts namely the feature and mapping DSL.
@@ -465,7 +464,7 @@ Thereby, it is possible to use Wireframesketcher and the feature DSL to concisel
 Further, it is possible to only generate the page objects from the combination of Wireframesketcher model and mapping DSL while implementing the test cases manually.
 
 As shown in \Cref{fig:architectureOverview} both generator implementations are independent and separated from the domains-specific language modules.
-Thereby, generators can be switched at runtime to generate for different environments, such as web or Eclipse RCP applications, without changing the DSLs.
+Thereby, generators can be switched at runtime to generate for different UI frameworks, such as web or Eclipse RCP applications, without changing the DSLs.
 Both generators interact with the wireframesketcher model as well as with the respective domain-specific language definition.
 The following sections will explain the modules content and their interaction in more detail.
 
@@ -476,12 +475,13 @@ The sketches are stored as instance of an Ecore model that is available in an op
 To use wireframesketcher models as basis for feature and mapping descriptions the underlying Ecore model was customized.
 
 First, the existing marker interfaces, such as \textit{ClickSupport} and \textit{SelectionSupport}, were enhanced to support more advance concepts such as \textit{DoubleClickSupport} and \textit{BooleanSelectionSupport}.
-Based on the marker interfaces implemented by a widget the proposal of available actions within a scenario description are determined at runtime.
-Second, the Screen class was extended to hold a \textit{name} attribute so that it can be referenced from feature and mapping definition using the Xtext default mechanisms.
-Finally, the ResourceDescriptionStrategy \cite{xtext.resourcedesc} of the wireframesketcher model was extended to work with nested elements on a screen, such as widgets in containers or widgets in tables.
+Based on the marker interfaces implemented by a widget the proposal of available actions within the Specification Language editor at the current cursor position are determined.
+%TODO Xtext Doku
+Second, the Screen class was extended to hold a \textit{name} attribute so that it can be referenced from feature and mapping definition using the Xtext default mechanisms [..].
+Finally, the ResourceDescriptionStrategy \cite{xtext.resourcedesc} of the wireframesketcher model was extended to work with nested elements on a screen, such as widgets in containers or widgets in tables, e.g., \cref{fig:overview}.
 
 The adjustments described above extend the capabilities of the underlying model, but had no side-effects on the remaining wireframesketcher tooling for drawing sketches.
-Consequently the model adjustments were delivered as an Eclipse feature patch that is fully inter-operable with the wireframesketcher UI functionalities so that they can be reused to create wireframe models.
+Consequently the model adjustments were delivered as an Eclipse feature patch that is fully inter-operable with the wireframesketcher editor so that they can be reused to create wireframe models.
 
 In order to support more complex UIs that are composed from different application parts, wireframesketcher supports reusable components.
 These components are defined as screens, however, they are marked within wireframesketcher as components and thereby become reusable for other screens \cite{Wireframesketcher.components}.
@@ -511,7 +511,7 @@ codeStatements+=CodeStatement*;
 
 CodeStatement:
 (AndI | WhenI ) AbstractCommand | 
-(AndThe | ThenThe | ThenIt ) Assertion |   
+(AndThe | ThenThe | ThenIt ) AbstractAssertion |   
 ThenIAmOnThe ToScreenSwitch;
 
 AbstractCommand:
@@ -531,7 +531,7 @@ TypeAction:
 'type' value=StringOrParam;
 \end{lstlisting}
 
-\Cref{lst:featureGrammar} shows a part of the feature Grammar that is basis for the definition of the scenario described in \Cref{lst:featureLogin}.
+\Cref{lst:featureGrammar} shows a part of the feature grammar that is basis for the definition of the scenario described in \Cref{lst:featureLogin}.
 After stating the name, the scenario description continues with setting the context to a specific screen before the commands and assertions are defined.
 As shown above an \textit{Command} consists of an actual action such as ``click" or ``type" that is followed by the widget on which it should be applied.
 Actions may have parameters for example to specify what should be typed into a text field. 
@@ -539,7 +539,7 @@ In addition, there are \textit{Assertion} statements that define the third part 
 Within a scenario it is possible to mix both kinds of statements so that one scenario could describe a series of commands and assertions, e.g. for larger processes taking place on a single or multi screen application.   
 
 \subsubsection{Advanced Concepts}
-In addition to the capabilities shown so far the feature DSL supports advanced concepts such, external test data, composed test cases, manually implemented commands and assertion, and integration with state of the art Application Lifecycle Management tools.
+In addition to the capabilities shown so far the feature DSL supports advanced concepts such as, external test data, composed test cases, manually implemented commands and assertion, and integration with state of the art Application Lifecycle Management tools.
  
 The first advanced concept deals with integrating external test data into the feature definition by introducing ``parameters" and ``data providers".
 Parameters can be used as placeholders instead of concrete text, e.g. in the \textit{BTypeAction} rule from \Cref{lst:featureGrammar}.
@@ -578,11 +578,23 @@ The latter is required to map the logical elements within a wireframesketcher mo
 As shown in \Cref{lst:mappinglogin} mapping files are defined per \textit{Screen} and consist of two parts.
 
 \begin{lstlisting}[captionpos=b, caption=Mapping Grammar, label={lst:mappingGrammar}, language=xtext]
+BMapping:
+'Mapping' screen=[uid::Screen|QualifiedName]
+bUrl=BUrl
+(bWidgetMapping+=BWidgetMapping)*
+;
+
 BUrl:
 'locator' '{'
 	('fragment' |'path') ':' mPath=MExpression
 	'}'
 ;
+
+BWidgetMapping:
+widget=[uid::Widget|QualifiedName] '{'
+('driver' ':' widgetNavigator=QualifiedName)?
+'locator' ':' locator=MExpression
+'}';
 \end{lstlisting}
 
 The first holds the name of the mapped screen and an ``locator" attribute containing a relative URL to find the screen within the application.
@@ -596,10 +608,10 @@ For a web application this might be the ID of an element in the DOM tree.
 The optional driver attribute holds a String value that represents a class on the classpath of the test project that is used interact with the widget.
 Specifying a custom driver allows to use custom widgets and their custom functions, e.g. to identify them.
 
-Since their is deep knowledge about the implementation necessary to fill out the mapping file, it should be created and maintained by the responsible developer. 
+Since there is deep knowledge about the implementation necessary to create the mapping file, it should be created and maintained by the responsible developer. 
 Because developer resources are usually very limited especially when it comes to writing tests, the introduced approach tries to reduce developer involvement.
 First, this is achieved by having one mapping file per Screen that is separated from the actual test script, so that the mapping definition is structured in known chunks (Screens in this case). 
-Second, the references to the EClasses representing the wireframesketcher widgets allows for extended validation support, e.g. automatically checking if all widgets of a screen are mapped.
+Second, the underlying wireframesketcher model allows for extended validation support, e.g., automatically checking if all widgets of a screen are mapped.
 Finally, the reusable component feature of wireframesketcher is supported by the mapping DSL, so that reusable screens only have to be mapped once.
 
 \subsection{Generator}\label{sec:Generator} 
@@ -609,50 +621,50 @@ The default implementation is a generator for web applications, that generates C
 In addition, there has been a proprietary generator for a SWT based RCP application.
 Since the feature and mapping files are created within Eclipse projects the generator to use can be defined per project.
 Within the properties of an Eclipse project any generator that is registered through the Eclipse Extension mechanism can be selected.
-Before a generation starts, the application asks the Property Service which generator should be executed and then tries to find that generator within the registered extensions.
 Being able to change the generator at any time makes the whole approach very flexible, however, it also adds restrictions to the DSLs.
 To allow changing generators lately the DSLs need to be generic to a level that different UI frameworks and concepts such as web, SWT or Swing based applications can be described.
-In addition, the DSLs should support the requirements engineer during the creation of test specifications by giving reasonable proposals.
+In addition, the DSLs should support the requirements engineer during the creation of test specifications by giving reasonable proposals and therefore need to be specific to some extend.
 
 In order to interact with the widget on a screen, the mapping generator create an Page Object \cite{fowler.2013} per Screen file.
 Within these page objects all interaction with the screen and its widgets are encapsulated.
 
 \begin{lstlisting}[captionpos=b, caption=Generated Page Object, label={lst:MappingGenerated}, language=dsl]
 class LoginScreen {
-	static url = "#/login"
-	static at = { waitFor { title == "Login" } }
+  static url = "#/login"
+  static at = { waitFor { title == "Login" } }
 	
-	static content = {
-		username (required: true) { module org.boomslang.module.BoomslangModule, $("#username") }
-		password (required: true) { module org.boomslang.module.BoomslangModule, $("#password") }
-		submit (required: true , wait:true) { module org.sample.calendar.ButtonDriver, $("#login") }
-	}
+  static content = {
+	username (required: true) { module org.bdd.module.DefaultDriver, $("#username") }
+	password (required: true) { module org.bdd.module.DefaultDriver, $("#password") }
+	submit (required: true) { module org.sample.calendar.ButtonDriver, $("#login") }
+  }
 }
 \end{lstlisting}
 
 \Cref{lst:MappingGenerated} shows the page object for the Login example that is generated as groovy file.
-The page object is in Groovy programming language because it interacts well with the Cucumber test specification that is generated by the feature generator.
+The page object is in groovy programming language because it interacts well with the Cucumber test specification that is generated by the feature generator.
 The structure of the generated page object is very close to the mapping file because in the end the mapping DSL is just an slightly enhanced page object description.
 The main part of the screen is the ``content" attribute that holds the locators for all the widgets on the screen.
 If a ``driver" is specified in the mapping file, it is referenced here and during runtime of the test cases the Cucumber framework tries to find the class on the classpath.
+The sample above shows that for the text fields the \textit{DefaultDriver} is used, while the button is accessed with the specific \textit{ButtonDriver}.
 
 \begin{lstlisting}[captionpos=b, caption=Generated Feature File, label={lst:featureGenerated}, language=dsl]
-	def "ValidLogin"() {
-	given:
+def "ValidLogin"() {
+  given:
 	to (org.specification.calendar.LoginScreen);
-	
-	when:
+
+  when:
 	username.value $username
-	and:
+  and:
 	password.value $password
-	
-	then:
+
+  then:
 	at OverviewScreen
-	and:
+  and:
 	waitFor { appointments }
-	
-	where:
-	$password | $username
+
+  where:
+	$password | $username	
 	"Password" | "johnDoe"
 }
 \end{lstlisting}
@@ -681,7 +693,7 @@ The approach presented in this paper focuses on generating automatically executa
 Looking at the testing pyramid as defined by [..] the Behavior-Driven UI test cases are from the top level area.
 Consequently, the scenario descriptions should focus on testing different UI behavior e.g. forcing error dialogs and page flows.
 Further, the test cases can cover very basic UI behavior like sorting and filtering of tables or opening all menus and tabs of the application. 
-Although, the Specification-Language allows for dynamically provided test data, it is not meant to build data intensive test cases that are more likely to be defined on the service test layer.
+Although, the Specification Language allows for dynamically provided test data, it is not meant to build data intensive test cases that are more likely to be defined on the service test layer.
 
 %Integration into the development process
 The Behavior-driven UI testing approach aims to integrate well with existing development processes. 
@@ -689,7 +701,7 @@ Therefore, the presented approach is not introducing new tools or techniques, bu
 First, the Wireframesketcher tool is used to define wireframe models ranging from simple one page application to complex multi-component perspectives.
 Second, the feature-DSL enhances the industry proven and widely accepted concepts from the ubiquitous language with references to widgets from the wireframe models.
 Third, the Mapping-DSL enables for fully generated test cases and in addition minimizes the involvement of critical developer resources. 
-Finally, the plugable generator architecture comes with a standard implementation that can be used for web-application that can be replaced to target company- or company-specific frameworks.
+Finally, the plugable generator architecture comes with a standard implementation that can be used for web-application that can be replaced to target company- or project-specific frameworks.
 In addition, the textual feature descriptions are edited and managed together with the source code of the application.
 Thereby, during every build test cases are executed and on top of that the results are stored in professional test management tools such as HP Quality Center.
 
@@ -697,18 +709,18 @@ Thereby, during every build test cases are executed and on top of that the resul
 
 First experiences were gained in context of the development of a banking application. 
 The developed software consist of four components, one has a javascript frontend and the other three are based on the Eclipse SWT UI framework.
-The wireframe models were instances of the same meta-model so that they both could be integrated with feature and mapping DSL, although, the graphical representation was slightly different.
-In addition to using the same wireframesketcher meta-model it was proven possible to use the same feature and mapping DSL to describe the behavior and widget mapping.
-The only, exception is the ``locator" attribute within the mapping file that contains two different keywords for introducing either a URL expression or a menu path to be followed.
+The wireframe models were instances of the same meta model so that they both could be integrated with feature and mapping DSL, although, the graphical representation was slightly different.
+In addition to using the same wireframesketcher meta-model, it was proven possible to use the same feature and mapping DSL to describe the behavior and widget mapping.
+The only, exception is the ``locator" attribute within the mapping file that contains two different keywords for introducing either a URL expression or a menu path to be followed in order to set the a screen in context.
 
 Within the projects that used the Specification Language wireframesketcher was already known as well as JBehave for defining feature descriptions.
-As a consequences the Specification Languages could be used by business analysts and developers after only 2 hours training.
-Furthermore, in comparison to manually writing automated test cases the time a developer spent decreased significantly by limiting their efforts to providing the mapping definitions.
+As a consequence, the Specification Languages could be used by business analysts and developers after only 2 hours training.
+Furthermore, in comparison to manually writing automated test cases the time a developer spent decreased significantly by limiting their efforts to solely providing the mapping definitions.
 However, since there were only four projects involved additional research is required.
 The feedback from business analysts was specially emphasizing the advanced validation possibilities that helped to keep wireframes and requirements specifications congruent.
 In addition, the concept of reusable components as introduced by wireframsketcher that is supported throughout the whole Behavior-driven UI testing approach was appreciated by business analysts to create concise scenario descriptions.
 In contrast to the idea of fully generating all test cases the practical experience has shown that there are cases in which a flexible way to include manually implemented code is necessary. 
-The implementation commands and assertions support this need and also give hints for concepts that should be supported by future versions of the Specification-Language.
+This requirement is fulfilled by \textit{ImplementedCommands} and \textit{ImplementedAssertions} which in addition give hints for concepts that should be supported by future versions of the Specification Language.
 
 The approach is currently limited by heavily depending on wireframeskechter models as basis for UI description while there are other tools such as Balsamiq or Pencil that are not backed by a formal meta-model.
 In addition, there is currently one generator for each technology such as web or RCP, however there are testing framework available that can be used to define joined test cases for both environments.
@@ -720,21 +732,21 @@ The implementation presented supports basic widgets such as text fields, buttons
 Besides being able to handle custom widgets using implemented commands, and assertions, and custom drivers, it is to be discovered which widgets are to be supported by the default implementation.
 With the flexible architecture of the introduced approach it is possible to support all kinds of custom widgets from wireframe through feature and mapping file up to the generator.
 
-In general future work is required to make the presented approach more flexible, especially, in the area of including also non wireframesketcher UI descrioptions. 
+In general, future work is required to make the presented approach more flexible, especially, in the area of including also non wireframesketcher UI descriptions. 
 Therefore, it should be researched if a generic UI model is required that is created by transforming formal or semi-formal UI descriptions as shown by [da Lara].
-Additionaly, it research is required to verify that scenario defined by the Specification-Language may also be translated to test cases for mobile applications.  
+Additionally, research is required to verify that scenario defined by the Specification Language may also be translated to test cases for mobile applications.  
 
 Especially, the reuse of the ubiquitous language constructs makes the feature and scenario description look familiar to people with experience in BDD. 
 In addition, every feature descriptions reads like a grammatically correct sentence so that they can even be used for describing the behaviour of the application without leveraging the benefits of automatically generated test cases.
 By combining existing artifacts from different areas of the software development process the Behavior-Driven UI testing approach leverages the full potential of these artifacts.
-At the same time Designer, Business Analysts and Developer remain in their known environment, but work together on a more formal level. 
+At the same time designer, business analysts and developer remain in their known environment, but work together on a more formal level. 
 
 %Store not only test results, but also test description in HP QC. 
 %Take a look build an intermediate model for the ui description to circumvent the hard dependency to wireframesketcher and configure more input models.
 %Make the feature DSL editable in the web editor
 
 All in all, the Behavior-Driven UI testing approach enhances the widely accepted Behavior-Driven development process leading to a more sophisticated process to specify and maintain automatically executable test cases.
-The integration of wireframesketcher models, Specification-Language and generators was tested successfully in four projects from the banking sector. 
+The integration of wireframesketcher models, Specification Language and generators was tested successfully in four projects from the banking sector. 
 
 %Future work:
 %Include more widgets and container types
